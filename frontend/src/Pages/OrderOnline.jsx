@@ -20,12 +20,8 @@ function OrderOnline () {
         <h3 className='mb-5'>Place a product order...</h3>
         <p></p>
 
-        {/* order request accordion */}
-        <Accordion>
-            {/* normal order request accordion item */}
-            <Accordion.Item eventKey='0'>
-                <Accordion.Header>Normal-Order Request</Accordion.Header>
-                <Accordion.Body>
+      
+       
                         
                         <Row className='justify-content-center'>
                             <Col xs={2}>
@@ -39,15 +35,10 @@ function OrderOnline () {
                             <Col xl={4}><p className='text-muted'><i>Delivery Only Within the City.</i></p></Col>
                         </Row>
                 
-                </Accordion.Body>
-                
-            </Accordion.Item>
+            
 
                 
-            {/* custom order request accordion item */}
-            <Accordion.Item eventKey='1'>
-                <Accordion.Header>Custom-Order Request</Accordion.Header>
-                <Accordion.Body>
+         
 
 
                         <Row className='justify-content-center'>
@@ -56,11 +47,10 @@ function OrderOnline () {
                                 <CustomOrder isCustomModalOpen={isCustomModalOpen} closeCustomModal={closeCustomModal} />
                             </Col>
                         </Row>
-                </Accordion.Body>
-            </Accordion.Item>
+             
 
 
-        </Accordion>
+       
 
        </>
 
