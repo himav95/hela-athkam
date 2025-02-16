@@ -1,0 +1,99 @@
+/* Common styles throught web pages. */
+.componentSpace {
+    margin-bottom: 8rem;
+  }
+  .rowMargin {
+    margin-bottom: 5rem;
+  }
+  .active-Link {
+    color: red;
+  }
+  
+  /* -----Home page css----- */
+  
+  .backgroundImageContainer {
+    background-image: url('../Images/background3.jpg');
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin-left: -112px;
+    margin-right: -112px;
+    margin-top: -66px;
+    z-index: 1;
+  }
+  
+  .backgroundImageContainer::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 254, 254, 0.15); /* Adjust color and opacity here */
+    z-index: 1;
+  }
+  
+  .backgroundImageContainer > div {
+    position: relative;
+    margin-top: 60px;
+    z-index: 2; /* Ensure content is above the overlay */
+    color: black;
+  }
+  
+  #carouselBlock {
+    width: 45rem;
+    height: 29rem;
+  }
+  #carouselMini1 {
+    width: 18rem;
+    height: 11rem;
+  }
+  #carouselMini2 {
+    width: 18rem;
+    height: 11rem;
+  }
+  #carouselMini3 {
+    width: 18rem;
+    height: 11rem;
+  }
+  #carouselMini4 {
+    width: 18rem;
+    height: 11rem;
+  }
+  
+  .carousellg {
+    width: 45rem;
+    height: 29rem;
+  }
+  
+  .imageFirst {
+    width: 18rem;
+    height: 11rem;
+    border-style: inherit;
+  }
+  .carouselSecond {
+    width: 18rem;
+    height: 11rem;
+  }
+  .carouselThird {
+    width: 18rem;
+    height: 11rem;
+  }
+  .carouselFourth {
+    width: 18rem;
+    height: 11rem;
+  }
+  
+ 
+  
+  
+  /* -----About page css----- */
+  #aboutContentCard {
+    border-style: none;
+  }
+  
+ 
+  
