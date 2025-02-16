@@ -1,4 +1,4 @@
-import { Card, Row, Col} from 'react-bootstrap';
+import { Card, Row, Col } from 'react-bootstrap';
 
 // import Hela athkam: Page css file here.
 import '../Asset/Style/Helaathkam_Page.css';

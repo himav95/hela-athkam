@@ -1,9 +1,11 @@
 import { Modal, Button } from 'react-bootstrap';
-function CraftsmanRequest ({ isRequestModalOpen, closeRequestModal }) {
+function CraftsmanRequest({ isRequestModalOpen, closeRequestModal }) {
   return (
-
-    
-    <Modal show={isRequestModalOpen} onHide={closeRequestModal} backdrop="static">
+    <Modal
+      show={isRequestModalOpen}
+      onHide={closeRequestModal}
+      backdrop="static"
+    >
       <Modal.Header closeButton>
         <Modal.Title>Welcome to Hela Athkam!</Modal.Title>
       </Modal.Header>
@@ -11,7 +13,7 @@ function CraftsmanRequest ({ isRequestModalOpen, closeRequestModal }) {
       <Modal.Body>
         <p>This is your login form.</p>
       </Modal.Body>
-      
+
       <Modal.Footer>
         <Button variant="secondary" onClick={closeRequestModal}>
           Close
@@ -19,8 +21,6 @@ function CraftsmanRequest ({ isRequestModalOpen, closeRequestModal }) {
         {/* Add additional buttons if needed */}
       </Modal.Footer>
     </Modal>
-    
-
   );
-};
+}
 export default CraftsmanRequest;
