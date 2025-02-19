@@ -14,18 +14,27 @@ import Login from './Forms/Login';
 import SignUp from './Forms/SignUp';
 
 function App() {
+
   // login and sign up forms modal state and function details.
-  const [isFormModalOpen, setFormModalOpen] = useState(false);
-  const openFormModal = () => setFormModalOpen(true);
-  const closeFormModal = () => setFormModalOpen(false);
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+  const [isSignModalOpen, setSignModalOpen] = useState(false);
+
+  const openLoginModal = () => setLoginModalOpen(true);
+  const closeLoginModal = () => setLoginModalOpen(false);
+
+  const openSignModal = () => setSignModalOpen(true);
+  const closeSignModal = () => setSignModalOpen(false);
+
   return (
     <>
-      <Header openFormModal={openFormModal} />
+      {/* sign and login modal */}
+      <Header openLoginModal={openLoginModal} openSignModal={openSignModal}/>
+
       {/* pass modal state and close function to the login component. */}
-      <Login isModalOpen={isFormModalOpen} closeFormModal={closeFormModal} />
+      <Login isModalOpen={isLoginModalOpen} closeLoginModal={closeLoginModal} />
 
       {/* pass modal state and close function to the sign up component. */}
-      <SignUp isModalOpen={isFormModalOpen} closeFormModal={closeFormModal} />
+      <SignUp isModalOpen={isSignModalOpen} closeSignModal={closeSignModal} />
 
       {/* Header.jsx pages nav routing */}
       <BrowserRouter>
