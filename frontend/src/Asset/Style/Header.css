@@ -1,7 +1,54 @@
-#page_navbar {
-  background-color: #154360;
+/* Hela athkam Header.jsx styles */
+
+/* ------Main navbar content------ */
+#mainBrand {
+  color: #025464;
+}
+
+.mainNavlink {
+  color: #053b50 !important;
+  font-weight: bold;
+}
+
+.mainNavlink:hover {
+  color: rgb(255, 213, 0) !important;
+}
+
+#mainNavbar {
+  height: 5rem;
+}
+
+/* ------Page navbar content------ */
+.pageNavBar {
+  background-color: #053b50;
+  display: flex; /* flexbox to adjust vertical centering */
+  align-items: center;
+  height: 4rem;
+  padding: 0.5rem 0;
+}
+
+#pageNavBarOnly {
+  margin-bottom: 4rem;
+  height: 2.5rem;
+}
+
+/* ------Active link css of page navbar links------ */
+.nav-pills .nav-link.active {
+  line-height: 1.2; /* controlling height without fixed height */
+  padding: 0.25rem 0.75rem; /* padding adjustment for reduce overall height */
+  display: flex;
+  align-items: center; /* center items vertically */
+  justify-content: center; /* center text horizontally */
+  background-color: #a2d9ce !important;
+  color: black !important;
+  height: auto;
+  margin: 0.25rem 0;
 }
 
 .pageLink {
-  color: cyan;
+  color: #f3f3f3 !important;
+}
+
+.pageLink:hover {
+  color: aqua !important;
 }

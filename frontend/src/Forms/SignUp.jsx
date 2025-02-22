@@ -1,6 +1,9 @@
 import { Modal, Button, Card, Row, Col } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 
+// import Helaathkam_Form.css for SignUp.css contents.
+import '../Asset/Style/Helaathkam_Form.css';
+
 function SignUp ({ isModalOpen, closeSignModal }) {
   return (
     <Modal show={isModalOpen} onHide={closeSignModal} backdrop="static" size='lg'>

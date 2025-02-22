@@ -26,7 +26,9 @@ function App() {
   const closeSignModal = () => setSignModalOpen(false);
 
   return (
-    <>
+    
+    <BrowserRouter>
+
       {/* sign and login modal */}
       <Header openLoginModal={openLoginModal} openSignModal={openSignModal}/>
 
@@ -37,9 +39,9 @@ function App() {
       <SignUp isModalOpen={isSignModalOpen} closeSignModal={closeSignModal} />
 
       {/* Header.jsx pages nav routing */}
-      <BrowserRouter>
         <Container className="container-fluid vh-100" style={{ marginTop: 20 }}>
           <Routes>
+            
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/products" element={<Products />} />
@@ -47,12 +49,12 @@ function App() {
             <Route path="/orderonline" element={<OrderOnline />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/joinus" element={<JoinUs />} />
-            <Route path="/joinus" element={<JoinUs />} />
+            
           </Routes>
         </Container>
         <Footer />
       </BrowserRouter>
-    </>
+    
   );
 }
 
