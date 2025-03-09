@@ -148,6 +148,8 @@ function CustomOrder () {
             <Button id="customSubmitButton">Submit</Button>
           </Col>
         </Row>
+
+        <Button> </Button>
       </Modal.Body>
     </Modal>
     
