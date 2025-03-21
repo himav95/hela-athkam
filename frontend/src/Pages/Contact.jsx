@@ -1,5 +1,5 @@
-import { Container, Card, Form, Button } from 'react-bootstrap';
-import { Row, Col } from 'react-bootstrap';
+import { Container, Card, Form, Button, Row, Col } from 'react-bootstrap';
+
 
 // import Hela athkam: Page css file here.
 import '../Asset/Style/Helaathkam_Page.css';

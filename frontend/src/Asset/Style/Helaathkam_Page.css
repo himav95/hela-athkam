@@ -102,3 +102,71 @@
 #contactInfoSRowspace {
   margin-bottom: 3rem;
 }
+
+
+/* -----Service Page css----- */
+.serviceImgz {
+  height: 10rem;
+  width: 10rem;
+}
+
+.serviceCardz {
+  border-style: none !important ;
+  margin-bottom: 5rem;
+}
+
+.serviceHeadings {
+  color: #2e4053;
+  font-weight: bold;
+}
+
+
+/* -----Join Us page css----- */
+#joinUsCard {
+  border-style: none;
+}
+
+#joinUsButton {
+  height: 3rem;
+  width: 30rem;
+  background-color: #176b87;
+  border-color: #176b87;
+  border-radius: 1rem !important;
+  color: white;
+  border-radius: 0%;
+  float: center;
+  margin-bottom: 3rem;
+}
+
+#joinUsButton:hover {
+  color: aqua;
+}
+
+#joinUsImg1 {
+  height: 15rem;
+  width: 18rem;
+  border-style: none;
+}
+
+#joinUsImg2 {
+  height: 15rem;
+  width: 18rem;
+  border-style: none;
+}
+
+#joinUsImg3 {
+  height: 15rem;
+  width: 18rem;
+  border-style: none;
+}
+
+#joinUsImg4 {
+  height: 15rem;
+  width: 18rem;
+  border-style: none;
+}
+
+#joinUsImageSet {
+  margin-bottom: 10rem;
+  border-style: none;
+}
