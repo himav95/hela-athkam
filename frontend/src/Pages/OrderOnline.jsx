@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Container, Card, Row, Col } from 'react-bootstrap';
 
 // import forms here.
-import NormalOrder from '../Forms/NormalOrder';
+import BulkOrder from '../Forms/BulkOrder';
 import CustomOrder from '../Forms/CustomOrder';
 
 // import Hela athkam: form css file here.
@@ -60,7 +60,7 @@ function OrderOnline() {
                         <Button id="bulkButton" onClick={openNormalModal}>
                           Bulk Order
                         </Button>
-                        <NormalOrder
+                        <BulkOrder
                           isNormalModalOpen={isNormalModalOpen}
                           closeNormalModal={closeNormalModal}
                         />

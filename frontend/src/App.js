@@ -21,14 +21,14 @@ import SignUp from './Forms/SignUp';
 
 // Admin components
 import Dashboard from './Pages/Admin/Dashboard';
-import Order from './Pages/Admin/Order';
+import OrderBulk from './Pages/Admin/OrderBulk';
 import OrderCustom from './Pages/Admin/OrderCustom';
 import TopNav from './Pages/Admin/Components/TopNav';
 import SideNav from './Pages/Admin/Components/SideNav';
 import CraftMaker from './Pages/Admin/CraftMaker';
 import CraftMakerRequest from './Pages/Admin/CraftMakerRequest';
 import Product from './Pages/Admin/Product';
-import Customer from './Pages/Admin/Customer';
+import User from './Pages/Admin/User';
 import UserMessages from './Pages/Admin/UserMessages';
 
 function App() {
@@ -201,19 +201,19 @@ function App() {
           />
 
           <Route
-            path="/admin/customer"
+            path="/admin/user"
             element={
               <AdminLayout>
-                <Customer />
+                <User />
               </AdminLayout>
             }
           />
 
           <Route
-            path="/admin/order"
+            path="/admin/orderbulk"
             element={
               <AdminLayout>
-                <Order />
+                <OrderBulk />
               </AdminLayout>
             }
           />

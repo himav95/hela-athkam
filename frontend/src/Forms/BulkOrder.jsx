@@ -8,7 +8,7 @@ import Toast from 'react-bootstrap/Toast';
 // import Hela athkam: form css file here.
 import '../Asset/Style/Helaathkam_Form.css';
 
-function NormalOrder({ isNormalModalOpen, closeNormalModal }) {
+function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
   // Noice tost state and function.
   const [showToast, setShowToast] = useState(true);
   const toggleShowToast = () => setShowToast(!showToast);
@@ -28,7 +28,7 @@ function NormalOrder({ isNormalModalOpen, closeNormalModal }) {
       >
         <Modal.Header id="normalOrderHeader" closeButton>
           <Modal.Title>
-            <h3>Order</h3>
+            <h3>Bulk Order</h3>
           </Modal.Title>
         </Modal.Header>
 
@@ -237,4 +237,4 @@ function NormalOrder({ isNormalModalOpen, closeNormalModal }) {
   );
 }
 
-export default NormalOrder;
+export default BulkOrder;

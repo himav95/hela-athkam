@@ -264,4 +264,63 @@
   font-size: small;
 }
 
+/* dashboard card css is here. */
+
+#filterCards1 {
+  /* width: 10rem; */
+  height: 8rem !important;
+  color: black;
+  border: none;
+  background-color: #f4d03f;
+  text-align: center;
+  padding: 10px;
+}
+
+#filterCards2 {
+  /* width: 10rem; */
+  height: 8rem !important;
+  color: black;
+  border: none;
+  background-color: #45b39d;
+  text-align: center;
+  padding: 10px;
+}
+
+#filterCards3 {
+  /* width: 10rem; */
+  height: 8rem !important;
+  color: black;
+  border: none;
+  background-color: #85c1e9;
+  text-align: center;
+  padding: 10px;
+}
+
+#filterCards4 {
+  /* width: 10rem; */
+  height: 8rem !important;
+  color: black;
+  border: none;
+  background-color: #af7ac5;
+  text-align: center;
+  padding: 10px;
+}
+
+#filterCards1:hover {
+  background-color: #f1c40f;
+}
+
+#filterCards2:hover {
+  background-color: #16a085;
+}
+
+#filterCards3:hover {
+  background-color: #3498db;
+}
+
+#filterCards4:hover {
+  background-color: #9b59b6;
+}
+
+/* Table css */
 
