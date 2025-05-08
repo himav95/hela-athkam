@@ -7,8 +7,10 @@ import Image18 from '../Asset/Images/Image18.jpg';
 import Image15 from '../Asset/Images/Image15.jpg';
 import Image22 from '../Asset/Images/Image22.jpg';
 
+
 // import Hela athkam: Page css file here.
 import '../Asset/Style/Helaathkam_Page.css';
+
 // import Hela athkam: Form css file here.
 import '../Asset/Style/Helaathkam_Form.css';
 
