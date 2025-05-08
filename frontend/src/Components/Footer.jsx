@@ -1,5 +1,4 @@
-import { Container, Nav } from 'react-bootstrap';
-import { Row, Col } from 'react-bootstrap';
+import { Container, Nav, Row, Col } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 
 // import footer css file here.
