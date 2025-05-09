@@ -28,14 +28,6 @@ const SideNav = () => {
           </Button>
         </Link>
 
-        <Link to="/admin/product" style={{ width: '100%' }}>
-          <Button
-            className={`listgroupButton mb-1 ${isActive('/admin/product') ? 'active' : ''}`}
-          >
-            <CaretRight className="caretRight1" /> All Product
-          </Button>
-        </Link>
-
         <Link to="/admin/orderbulk" style={{ width: '100%' }}>
           <Button
             className={`listgroupButton mb-1 ${isActive('/admin/orderbulk') ? 'active' : ''}`}
@@ -43,6 +35,7 @@ const SideNav = () => {
             <CaretRight className="caretRight1" /> Bulk Order Request
           </Button>
         </Link>
+
 
         <Link to="/admin/ordercustom" style={{ width: '100%' }}>
           <Button
@@ -52,19 +45,21 @@ const SideNav = () => {
           </Button>
         </Link>
 
-        <Link to="/admin/user" style={{ width: '100%' }}>
+
+
+        <Link to="/admin/product" style={{ width: '100%' }}>
           <Button
-            className={`listgroupButton mb-1 ${isActive('/admin/user') ? 'active' : ''}`}
+            className={`listgroupButton mb-1 ${isActive('/admin/product') ? 'active' : ''}`}
           >
-            <CaretRight className="caretRight1" /> User
+            <CaretRight className="caretRight1" /> All Product
           </Button>
         </Link>
 
-        <Link to="/admin/craftmaker" style={{ width: '100%' }}>
+        <Link to="/admin/usermessages" style={{ width: '100%' }}>
           <Button
-            className={`listgroupButton mb-1 ${isActive('/admin/craftmaker') ? 'active' : ''}`}
+            className={`listgroupButton mb-1 ${isActive('/admin/usermessages') ? 'active' : ''}`}
           >
-            <CaretRight className="caretRight1" /> Craft Maker
+            <CaretRight className="caretRight1" /> Messages/Inquiry
           </Button>
         </Link>
 
@@ -76,13 +71,22 @@ const SideNav = () => {
           </Button>
         </Link>
 
-        <Link to="/admin/usermessages" style={{ width: '100%' }}>
+        <Link to="/admin/craftmaker" style={{ width: '100%' }}>
           <Button
-            className={`listgroupButton mb-1 ${isActive('/admin/usermessages') ? 'active' : ''}`}
+            className={`listgroupButton mb-1 ${isActive('/admin/craftmaker') ? 'active' : ''}`}
           >
-            <CaretRight className="caretRight1" /> Messages/Inquiry
+            <CaretRight className="caretRight1" /> Craft Maker
           </Button>
         </Link>
+
+        <Link to="/admin/user" style={{ width: '100%' }}>
+          <Button
+            className={`listgroupButton mb-1 ${isActive('/admin/user') ? 'active' : ''}`}
+          >
+            <CaretRight className="caretRight1" /> User
+          </Button>
+        </Link>
+        
       </Card.Body>
     </Card>
   );
