@@ -1,10 +1,18 @@
 import {Row, Col, Card, Button, Form, Table, Pagination} from 'react-bootstrap';
-import { PencilSquare, TrashFill, InfoLg } from 'react-bootstrap-icons';
+import { PencilSquare, TrashFill, Eye, Check2Circle, XCircle, PlusLg } from 'react-bootstrap-icons';
+import { useState } from 'react';
+import ViewModal from './Components/ViewModal';
+
 
 // import Hela athkam: page css file here.
 import '../../Asset/Style/Helaathkam_Page.css';
 
 function OrderCustom () {
+
+  const [isViewModalopen, setViewModalOpen] = useState(false);
+  
+    const openViewModal = () => setViewModalOpen(true);
+    const closeViewModal = () => setViewModalOpen(false);
     return(
         
        <Card className='mt-4'>
@@ -22,28 +30,51 @@ function OrderCustom () {
         </Card.Header>
 
         <Card.Body>
+           <Row className='mb-3'>
+                      <Col className='justify-content-end'>
+                      <Button variant='outline-primary'><PlusLg /> Add New</Button>
+                      </Col>
+                    </Row>
+
           <Table variant='light' striped bordered hover>
             <thead>
               <tr>
-                <th>PID</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Inventory</th>
-                <th>Modify</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"6%"}}>OID</th>
+                <th style={{verticalAlign:"middle", textAlign:"center ", width:"10%"}}>Customer Name</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"6%"}}>Phone</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"9%"}}>Email</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"12%"}}>Description</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"9%"}}>Image</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"4%"}}>Quantity</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"5%"}}>Total Amount</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"5%"}}>Delivery Date</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"5%"}}>Delivery Type</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"20%"}}>Action</th>
               </tr>
               <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                  <Button variant='outline-info' className='ms-2'><InfoLg /></Button>
-                  <Button variant='outline-warning' className='ms-2'><PencilSquare /></Button>
-                  <Button variant='outline-danger' className='ms-2'><TrashFill /></Button>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}>
+                  <Button variant='outline-success' className='ms-1'><Check2Circle /></Button>
+                  <Button variant='outline-secondary' className='ms-1'><XCircle /></Button>
+                  <Button variant='outline-info' className='ms-1' onClick={openViewModal}><Eye /></Button>
+                  <Button variant='outline-warning' className='ms-1'><PencilSquare /></Button>
+                  <Button variant='outline-danger' className='ms-1 me-1'><TrashFill /></Button>
                 </td>
               </tr>
             </thead>
           </Table>
+
+          <ViewModal isViewModalopen={isViewModalopen} closeViewModal={closeViewModal} />
+
 
           <Row>
           <Col></Col>

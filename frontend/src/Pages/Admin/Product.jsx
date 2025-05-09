@@ -1,5 +1,5 @@
 import {Row, Col, Card, Button, Form, Table, Pagination} from 'react-bootstrap';
-import { PencilSquare, TrashFill, InfoLg, PlusLg } from 'react-bootstrap-icons';
+import { PencilSquare, TrashFill, PlusLg } from 'react-bootstrap-icons';
 
 // import Hela athkam: page css file here.
 import '../../Asset/Style/Helaathkam_Page.css';
@@ -24,27 +24,34 @@ function Product() {
         <Card.Body>
           <Row className='mb-3'>
             <Col className='justify-content-end'>
-            <Button variant='outline-success'><PlusLg /> Add New</Button>
+            <Button variant='outline-primary'><PlusLg /> Add New</Button>
             </Col>
           </Row>
           
           <Table variant='light' striped bordered hover>
             <thead>
               <tr>
-                <th>PID</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Inventory</th>
-                <th>Modify</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"6%"}}>Product ID</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"10%"}}>Image</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"10%"}}>Product Name</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"7%"}}>Category</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"7%"}}>Craftsman ID</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"6%"}}>Price</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"7%"}}>Stock</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"7%"}}>Status</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"10%"}}>Action</th>
               </tr>
               <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                <Button variant='outline-info' className='ms-2'><InfoLg /></Button>
-                <Button variant='outline-warning' className='ms-2'><PencilSquare /></Button>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}>
+                  <Button variant='outline-warning' className='ms-2'><PencilSquare /></Button>
                   <Button variant='outline-danger' className='ms-2'><TrashFill /></Button>
                 </td>
               </tr>

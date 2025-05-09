@@ -1,5 +1,5 @@
 import {Row, Col, Card, Button, Form, Table, Pagination} from 'react-bootstrap';
-import { PencilSquare, TrashFill, InfoLg, PlusLg } from 'react-bootstrap-icons';
+import { PencilSquare, TrashFill, PlusLg, PauseCircle } from 'react-bootstrap-icons';
 
 // import Hela athkam: page css file here.
 import '../../Asset/Style/Helaathkam_Page.css';
@@ -9,7 +9,7 @@ function CraftMaker (){
         
         <Card className='mt-4'>
         <Card.Header style={{backgroundColor:'#ebedef'}}>
-        <Row className='mt-3'><Col className='ms-3'><h4>Craft Maker : In-house</h4></Col></Row>
+        <Row className='mt-3'><Col className='ms-3'><h4>Craft Maker</h4></Col></Row>
         <Row className='mb-4'>  <Form className='d-flex'>
             <Form.Control
             type='search'
@@ -24,26 +24,36 @@ function CraftMaker (){
         <Card.Body>
         <Row className='mb-3'>
             <Col className='justify-content-end'>
-            <Button variant='outline-success'><PlusLg /> Add New</Button>
+            <Button variant='outline-primary'><PlusLg /> Add New</Button>
             </Col>
           </Row>
 
           <Table variant='light' striped bordered hover>
             <thead>
               <tr>
-                <th>PID</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Inventory</th>
-                <th>Modify</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"6%"}}>Craftsman ID</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"10%"}}>Name</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"7%"}}>Type</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"7%"}}>NIC</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"7%"}}>Phone</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"10%"}}>Email</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"10%"}}>Address</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"8%"}}>Specialization</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"6%"}}>Status</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"15%"}}>Action</th>
               </tr>
               <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                <Button variant='outline-info' className='ms-2'><InfoLg /></Button>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
+                <td style={{verticalAlign:"middle", textAlign:"center"}}>
+                <Button variant='outline-secondary' className='ms-2'><PauseCircle /></Button>
                 <Button variant='outline-warning' className='ms-2'><PencilSquare /></Button>
                   <Button variant='outline-danger' className='ms-2'><TrashFill /></Button>
                 </td>

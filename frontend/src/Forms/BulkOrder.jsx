@@ -17,7 +17,7 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
 
   return (
     <>
-      {/* Normal order modal */}
+      {/* Bulk/Normal order modal */}
       <Modal
         show={isNormalModalOpen}
         onHide={closeNormalModal}
@@ -32,7 +32,7 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
           </Modal.Title>
         </Modal.Header>
 
-        {/* Normal order form content within modal body */}
+        {/* Bulk/Normal order form content within modal body */}
         <Modal.Body id="normalOrderBody">
           <Row className="mb-3">
             <Col>
@@ -40,7 +40,7 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
             </Col>
           </Row>
 
-          {/* normal order form: customer details  */}
+          {/* Bulk/normal order form: customer details  */}
           <Row className="mb-3">
             <Col></Col>
             {/* customer name */}
@@ -92,7 +92,7 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
 
           <hr />
 
-          {/* normal order form: order request details */}
+          {/* Bulk/normal order form: order request details */}
           <Row className="mb-3">
             <Col>
               <h6 className="text-muted">Order Details</h6>
@@ -137,7 +137,7 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
             <Col></Col>
           </Row>
 
-          {/* normal order form product quantity and delivery date and delivery option */}
+          {/* Bulk/normal order form product quantity and delivery date and delivery option */}
           <Row className="mb-5">
             <Col></Col>
 
@@ -217,7 +217,7 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
             <Col></Col>
           </Row>
 
-          {/* normal order form close and submit buttons. */}
+          {/* Bulk/normal order form close and submit buttons. */}
           <Row>
             <Col>
               <Button
