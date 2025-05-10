@@ -267,17 +267,17 @@
 /* dashboard card css is here. */
 
 #filterCards1 {
-  /* width: 10rem; */
+  width: 15rem;
   height: 8rem !important;
   color: black;
   border: none;
-  background-color: #f4d03f;
+  background-color: #d7d04b;
   text-align: center;
   padding: 10px;
 }
 
 #filterCards2 {
-  /* width: 10rem; */
+  width: 15rem;
   height: 8rem !important;
   color: black;
   border: none;
@@ -287,7 +287,7 @@
 }
 
 #filterCards3 {
-  /* width: 10rem; */
+  width: 15rem;
   height: 8rem !important;
   color: black;
   border: none;
@@ -297,7 +297,7 @@
 }
 
 #filterCards4 {
-  /* width: 10rem; */
+  width: 15rem;
   height: 8rem !important;
   color: black;
   border: none;
@@ -306,8 +306,20 @@
   padding: 10px;
 }
 
+
+#filterCards5 {
+  width: 15rem;
+  height: 8rem !important;
+  color: black;
+  border: none;
+  background-color: #be6d8b;
+  text-align: center;
+  padding: 10px;
+}
+
+
 #filterCards1:hover {
-  background-color: #f1c40f;
+  background-color: #f4b939;
 }
 
 #filterCards2:hover {
@@ -322,5 +334,16 @@
   background-color: #9b59b6;
 }
 
-/* Table css */
+#filterCards5:hover {
+  background-color: #9f4b78;
+}
+
+/* src/Pages/Admin/Componente/ViewModsal css is here. */
+#ViewModalBody {
+  background-color: #EEEEEE;
+}
+
+#ViewModalHeader {
+  background-color: #64CCC5;
+}
 

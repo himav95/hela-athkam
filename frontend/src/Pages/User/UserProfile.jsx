@@ -1,10 +1,9 @@
-import { Row, Col, Card } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
+import '../../Asset/Style/Helaathkam_Page.css';
+import { Card } from 'react-bootstrap';
 import { BarChart, ClipboardCheck, Bag, ChatDots  } from 'react-bootstrap-icons';
 
-// import Hela athkam: Page css file here.
-import '../../Asset/Style/Helaathkam_Page.css';
-
-function Dashboard() {
+function UserProfile() {
   return (
     
       <Card className="mt-5" style={{ border: 'none' }}>
@@ -15,20 +14,20 @@ function Dashboard() {
             </Col>
           </Row>
 
-          <Row className='mb-5'>
+          <Row>
             <Col></Col>
 
             <Col>
               <Card id="filterCards1">
                 <Row><Col> <BarChart /></Col></Row>
-                <Row><Col>New Bulk Orders</Col></Row>
+                <Row><Col>In-Progress Orders</Col></Row>
               </Card>
             </Col>
 
             <Col>
               <Card id="filterCards2">
                 <Row><Col><ClipboardCheck /></Col></Row>
-                <Row><Col>New Custom Orders</Col></Row>
+                <Row><Col>Completed Orders</Col></Row>
               </Card>
             </Col>
 
@@ -36,20 +35,6 @@ function Dashboard() {
               <Card id="filterCards3">
                 <Row><Col><Bag /></Col></Row>
                 <Row><Col>To be Delivered</Col></Row>
-              </Card>
-            </Col>
-           
-
-            <Col></Col>
-          </Row>
-
-          <Row>
-            <Col></Col>
-
-            <Col>
-            <Card id="filterCards5">
-                <Row><Col><ChatDots /></Col></Row>
-                <Row><Col>New Craft Maker Requests</Col></Row>
               </Card>
             </Col>
 
@@ -68,4 +53,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default UserProfile;

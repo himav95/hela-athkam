@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card';
 import { useState } from 'react';
 
 
+
 function ViewModal({ isViewModalopen, closeViewModal }) {
 
     const [approvalstatus, setApprovalStatus] = useState(null);
@@ -16,10 +17,10 @@ function ViewModal({ isViewModalopen, closeViewModal }) {
             onHide={closeViewModal}
             size='lg'
             backdrop='static'>
-            <Modal.Header>
+            <Modal.Header id='ViewModalHeader'>
                 <Modal.Title>More Details</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body id='ViewModalBody'>
                 <Card>
                     <Card.Body>
                         <Row className='mb-5'>
@@ -44,12 +45,22 @@ function ViewModal({ isViewModalopen, closeViewModal }) {
                             </Col>
                         </Row>
 
-                        <Row>
+                        <Row className='mb-4'>
                             <Col><p>Advance Payment : </p> </Col>
                             <Col>Remaining Payment :</Col>
                         </Row>
-                        <Row>
+                        <Row className='mb-4'>
                             <Col>Full Payment Recieved :</Col>
+                            <Col></Col>
+                        </Row>
+
+                        <Row className='mb-4'>
+                            <Col><p>Delivery Destination : <p className='text-muted'>(on demand)</p></p></Col>
+                            <Col></Col>
+                        </Row>
+
+                        <Row className='mb-4'>
+                            <Col><p>Delivery/Pickup Confirmation : <p className='text-muted'>(on demand)</p></p></Col>
                             <Col></Col>
                         </Row>
                     </Card.Body>

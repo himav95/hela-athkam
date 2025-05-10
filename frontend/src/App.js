@@ -31,6 +31,13 @@ import Product from './Pages/Admin/Product';
 import User from './Pages/Admin/User';
 import UserMessages from './Pages/Admin/UserMessages';
 
+// User Profile Components
+import UserProfile from './Pages/User/UserProfile';
+import ProfileTop from './Pages/User/Components/ProfileTop';
+import ProfileSide from './Pages/User/Components/ProfileSide';
+import Purchases from './Pages/User/Purchases';
+import UserProfileEdit from './Pages/User/UserProfileEdit';
+
 function App() {
   // login and sign up forms modal state and function details.
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
@@ -73,6 +80,21 @@ function App() {
           </Col>
           <Col xs={10}>{children}</Col>
         </Row>
+      </>
+    );
+  };
+
+
+  const UserProfileLayout = ({ children }) => {
+    return (
+      <>
+      <ProfileTop />
+      <Row style={{ margin:0 , height: 'calc(100vh - 50px)'}}>
+        <Col xs={2} style={{backgroundColor: '#d6dbdf'}}>
+        <ProfileSide />
+        </Col>
+        <Col xs={10}>{children}</Col>
+      </Row>
       </>
     );
   };
@@ -235,6 +257,38 @@ function App() {
               </AdminLayout>
             }
           />
+
+
+          {/* User Profile Routes */}
+
+          <Route
+          path="/user/userprofile"
+          element={
+            <UserProfileLayout>
+              <UserProfile />
+            </UserProfileLayout>
+          }
+          />
+
+          <Route
+          path="/user/purchases"
+          element={
+            <UserProfileLayout>
+              <Purchases />
+            </UserProfileLayout>
+          }
+          />
+
+          <Route
+          path="/user/userprofileedit"
+          element={
+            <UserProfileLayout>
+              <UserProfileEdit />
+            </UserProfileLayout>
+          }
+          />
+          
+
         </Routes>
       </BrowserRouter>
     </>
