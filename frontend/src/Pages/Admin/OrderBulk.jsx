@@ -51,7 +51,7 @@ function OrderBulk () {
                 <th style={{verticalAlign:"middle", textAlign:"center", width:"6%"}}>Total Amount</th>
                 <th style={{verticalAlign:"middle", textAlign:"center", width:"6%"}}>Delivery Date</th>
                 <th style={{verticalAlign:"middle", textAlign:"center", width:"6%"}}>Delivery Type</th>
-                <th style={{verticalAlign:"middle", textAlign:"center", width:"20%"}}>Actions</th>
+                <th style={{verticalAlign:"middle", textAlign:"center", width:"20%"}}>Action</th>
               </tr>
               <tr>
                 <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
