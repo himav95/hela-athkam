@@ -22,7 +22,7 @@ function Home() {
 
         {/* Mini image block content is here. */}
         <div>
-          <Row className="rowMargin">
+          <Row className="rowMargin mt-4">
             <Col></Col>
             <Col>
               <h6>Houseware</h6>

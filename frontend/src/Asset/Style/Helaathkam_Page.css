@@ -3,7 +3,7 @@
   margin-bottom: 8rem;
 }
 .rowMargin {
-  margin-bottom: 5rem;
+  margin-bottom: 10rem;
 }
 .active-Link {
   color: red;
@@ -67,12 +67,20 @@
 .carousellg {
   width: 45rem;
   height: 29rem;
+  border-top-left-radius: 100px;
+  border-bottom-right-radius: 100px;
+  border-style: inset;
+
 }
 
 .imageFirst {
   width: 18rem;
   height: 11rem;
   border-style: inherit;
+  border-style: inset;
+  border-top-right-radius: 50px;
+  border-bottom-left-radius: 50px;
+
 }
 .carouselSecond {
   width: 18rem;
@@ -264,46 +272,110 @@
   font-size: small;
 }
 
+/* Admin Dashboard specific styles */
+.dashboard-container {
+  padding: 1rem 0;
+}
+
+.dashboard-main-card {
+  border: none !important;
+  background-color: #f8f9fa;
+  border-radius: 12px !important;
+}
+
+.dashboard-title {
+  color: #2e4053;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.dashboard-metric-card {
+  height: 100% !important;
+  border-radius: 12px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.dashboard-metric-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.dashboard-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.dashboard-card-title {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.dashboard-trend {
+  font-size: 12px;
+  font-weight: 600;
+}
+
 /* dashboard card css is here. */
 
 #filterCards1 {
-  width: 15rem;
-  height: 8rem !important;
-  color: black;
+  width: 100%;
+  height: auto !important;
+  color: #000;
   border: none;
-  background-color: #d7d04b;
-  text-align: center;
-  padding: 10px;
+  background-color: #ffeaa7;
+  text-align: left;
+  padding: 1.25rem;
 }
 
 #filterCards2 {
-  width: 15rem;
-  height: 8rem !important;
-  color: black;
+  width: 100%;
+  height: auto !important;
+  color: #000;
   border: none;
-  background-color: #45b39d;
-  text-align: center;
-  padding: 10px;
+  background-color: #c4f6eb;
+  text-align: left;
+  padding: 1.25rem;
 }
 
 #filterCards3 {
-  width: 15rem;
-  height: 8rem !important;
-  color: black;
+  width: 100%;
+  height: auto !important;
+  color: #000;
   border: none;
-  background-color: #85c1e9;
-  text-align: center;
-  padding: 10px;
+  background-color: #d0e3ff;
+  text-align: left;
+  padding: 1.25rem;
 }
 
 #filterCards4 {
-  width: 15rem;
-  height: 8rem !important;
-  color: black;
+  width: 100%;
+  height: auto !important;
+  color: #000;
   border: none;
-  background-color: #af7ac5;
-  text-align: center;
-  padding: 10px;
+  background-color: #e8daef;
+  text-align: left;
+  padding: 1.25rem;
+}
+
+#filterCards5 {
+  width: 100%;
+  height: auto !important;
+  color: #000;
+  border: none;
+  background-color: #f8d7da;
+  text-align: left;
+  padding: 1.25rem;
+}
+
+#filterCards1:hover, #filterCards2:hover, #filterCards3:hover,
+#filterCards4:hover, #filterCards5:hover {
+  filter: brightness(95%);
 }
 
 

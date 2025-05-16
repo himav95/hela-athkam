@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Toast from 'react-bootstrap/Toast';
 
 // import form validation js file here.
-import validateForm from '../Asset/Script/formValidation';
+import {formValidation} from '../Asset/Script/formValidation';
 
 // import Hela athkam: form css file here.
 import '../Asset/Style/Helaathkam_Form.css';
@@ -13,45 +13,7 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
   // Noice tost state and function.
   const [showToast, setShowToast] = useState(true);
   const toggleShowToast = () => setShowToast(!showToast);
-
-
-  // form state.
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phoneNumber: '',
-    productCategory: '',
-    product: '',
-    quantity: '',
-    deliveryDate: '',
-    deliveryOption: 'pickup',
-    companyName: ''
-  });
-
-  const [errors, setErrors] = useState({});
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
-
-
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const validation = validateForm(formData, 'bulk');
-    setErrors(validation.errors);
-
-    if (validation.isValid) {
-
-      // submit form logic here. API call to backend.
-      console.log('Form submitted:', formData);
-      closeNormalModal();
-    }
-  };
+  
 
 
 
@@ -74,7 +36,6 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
 
         {/* Bulk/Normal order form content within modal body */}
         <Modal.Body id="normalOrderBody">
-          <Form onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Col>
               <h6 className="text-muted">Customer Details</h6>
@@ -95,15 +56,8 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
                   id="fullName"
                   size="sm"
                   type="text"
-                  value={formData.name}
-                  onChange={handleChange}
-                  isInvalid={!!errors.name}
                   autoFocus
                 ></Form.Control>
-
-                <Form.Control.Feedback type="invalid">
-                  {errors.name}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
 
@@ -116,16 +70,8 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
                 <Form.Control
                   size="sm"
                   type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  isInvalid={!!errors.email}
                   placeholder="helaathkam@example.com"
                 ></Form.Control>
-
-                <Form.Control.Feedback type="invalid">
-                  {errors.email}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col></Col>
@@ -139,17 +85,7 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
                 <Form.Label className="customLabel">
                   Phone Number <Form.Label className="required">*</Form.Label>
                 </Form.Label>
-                <Form.Control size="sm" 
-                type="text"
-                name="phoneNumber"
-                  value={formData.phoneNumber}
-                  onChange={handleChange}
-                  isInvalid={!!errors.phoneNumber}
-                ></Form.Control>
-
-                <Form.Control.Feedback type="invalid">
-                  {errors.phoneNumber}
-                </Form.Control.Feedback>
+                <Form.Control size="sm" type="text"></Form.Control>
               </Form.Group>
             </Col>
             <Col xs={4}></Col>
@@ -174,12 +110,7 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
                   Product Category{' '}
                   <Form.Label className="required">*</Form.Label>
                 </Form.Label>
-                <Form.Select size="sm" aria-label="categoryOptions"
-                name="productCategory"
-                  value={formData.productCategory}
-                  onChange={handleChange}
-                  isInvalid={!!errors.productCategory}
-                >
+                <Form.Select size="sm" aria-label="categoryOptions">
                   <option selected disabled>
                     Select Category
                   </option>
@@ -188,10 +119,6 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
                   <option>Kitchenware</option>
                   <option>Bags</option>
                 </Form.Select>
-
-                <Form.Control.Feedback type="invalid">
-                  {errors.productCategory}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
 
@@ -201,22 +128,12 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
                 <Form.Label className="customLabel">
                   Product <Form.Label className="required">*</Form.Label>
                 </Form.Label>
-                <Form.Select size="sm" 
-                aria-label="product"
-                name="product"
-                  value={formData.product}
-                  onChange={handleChange}
-                  isInvalid={!!errors.product}
-                >
+                <Form.Select size="sm" aria-label="product">
                   <option selected disabled>
                     Select Product
                   </option>
                   <option></option>
                 </Form.Select>
-
-                <Form.Control.Feedback type="invalid">
-                  {errors.product}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col></Col>
@@ -232,16 +149,7 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
                 <Form.Label className="customLabel">
                   Quantity <Form.Label className="required">*</Form.Label>
                 </Form.Label>
-                <Form.Control size="sm" type="text"
-                name="quantity"
-                  value={formData.quantity}
-                  onChange={handleChange}
-                  isInvalid={!!errors.quantity}
-                ></Form.Control>
-
-                 <Form.Control.Feedback type="invalid">
-                  {errors.quantity}
-                </Form.Control.Feedback>
+                <Form.Control size="sm" type="text"></Form.Control>
               </Form.Group>
 
               {/* delivery date */}
@@ -249,16 +157,7 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
                 <Form.Label className="customLabel">
                   delivery Date <Form.Label className="required">*</Form.Label>
                 </Form.Label>
-                <Form.Control size="sm" type="date"
-                name="deliveryDate"
-                  value={formData.deliveryDate}
-                  onChange={handleChange}
-                  isInvalid={!!errors.deliveryDate}
-                ></Form.Control>
-
-                 <Form.Control.Feedback type="invalid">
-                  {errors.deliveryDate}
-                </Form.Control.Feedback>
+                <Form.Control size="sm" type="date"></Form.Control>
               </Form.Group>
             </Col>
 
@@ -296,9 +195,6 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
                       <Form.Check
                         type="radio"
                         name="deliver"
-                        value="pickup"
-                        checked={formData.deliveryOption === 'pickup'}
-                        onChange={handleChange}
                         inline
                       ></Form.Check>
                       <Form.Label className="customLabel">Pick Up</Form.Label>
@@ -309,9 +205,6 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
                       <Form.Check
                         type="radio"
                         name="deliver"
-                        value="delivery"
-                        checked={formData.deliveryOption === 'delivery'}
-                        onChange={handleChange}
                         onClick={toggleShowToast}
                         inline
                       ></Form.Check>
@@ -340,7 +233,6 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
               <Button id="normalSubmitButton">Submit</Button>
             </Col>
           </Row>
-          </Form>
         </Modal.Body>
       </Modal>
     </>

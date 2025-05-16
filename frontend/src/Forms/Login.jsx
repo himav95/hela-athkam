@@ -1,69 +1,104 @@
-import { Modal, Button, Row, Col} from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
+import Nav from 'react-bootstrap/Nav';
+import { InputGroup } from 'react-bootstrap';
+import { EnvelopeAt, Key } from 'react-bootstrap-icons';
+// For form management and data validation import - formik yup.
 
-// import Helaathkam_Form.css for Login.jsx css contents.
-import "../Asset/Style/Helaathkam_Form.css";
+// import Hela athkam: form css file.
+import '../Asset/Style/Helaathkam_Form.css';
 
-function Login ({isModalOpen, closeLoginModal}) {
+function Login({ isModalOpen, closeLoginModal, openSignModal}) {
   return (
-    <Modal show={isModalOpen}
-           onHide={closeLoginModal} 
-           backdrop="static"
-           size='lg'
-           dialogClassName='loginModal'
-           centered>
-            
-      <Modal.Header id='loginModalHeader' closeButton>
-        <Modal.Title><h2>Welcome to Hela Athkam!</h2></Modal.Title>
-      </Modal.Header>
+    <>
+      {/* login modal */}
+      <Modal
+        show={isModalOpen}
+        onHide={closeLoginModal}
+        backdrop="static"
+        size="lg"
+        dialogClassName="loginModal"
+        centered
+      >
+        <Modal.Header id="loginModalHeader" closeButton>
+          <Modal.Title>
+            <h3 className="text-muted ms-3">HELA ATHKAM : Login</h3>
+          </Modal.Title>
+        </Modal.Header>
 
-      {/* login form content */}
-      <Modal.Body id='loginModalBody'>
-        <Row className='mb-5'></Row>
+        {/* login form content within modal body. */}
+        <Modal.Body id="loginModalBody">
+          <Row className="mb-5"></Row>
 
-        {/* login form email */}
-        <Row className="mb-4">
-          <Col></Col>
-          <Col xs={6}>
-              <Form.Group controlId="email">
-                <Form.Label>Email <Form.Label className='required'>*</Form.Label></Form.Label>
-                <Form.Control type="email" placeholder='helaathkam@example.com' autoFocus/>
-              </Form.Group>
-              </Col>
-          <Col></Col>
-        </Row> 
+          {/* login form email */}
+          <Row className="mb-4">
+            <Col></Col>
+            <Col xs={6}>
+              <InputGroup className="mb-3" size='sm'>
+                <InputGroup.Text id="email">
+                  <EnvelopeAt size={20} color="#176b87" />
+                </InputGroup.Text>
+                <Form.Control
+                  placeholder="Enter Your E-mail Address"
+                  type="email"
+                  aria-label="UserEmail"
+                  aria-describedby="email"
+                  autoFocus
+                />
+              </InputGroup>
+            </Col>
+            <Col></Col>
+          </Row>
 
-        {/* login form password */}
-        <Row className="mb-5">
-          <Col></Col>
-          <Col xs={6}>
-          <Form.Group controlId="password1">
-                <Form.Label>password <Form.Label className='required'>*</Form.Label></Form.Label>
-                <Form.Control type="password" />
-              </Form.Group>
-          </Col>
-          <Col></Col>
-        </Row>
+          {/* login form password */}
+          <Row className="mb-5">
+            <Col></Col>
+            <Col xs={6}>
+              <InputGroup className="mb-3" size='sm'>
+                <InputGroup.Text id="password1">
+                  <Key size={20} color="#176b87" />
+                </InputGroup.Text>
+                <Form.Control
+                  placeholder="Enter Your Password"
+                  type="password"
+                  aria-label="UserPwd1"
+                  aria-describedby="password1"
+                />
+              </InputGroup>
+            </Col>
+            <Col></Col>
+          </Row>
 
-        {/* login button */}
-        <Row className='justify-content-center mb-5' > 
-        <Button variant="secondary"  onClick={closeLoginModal} id='loginButton'>Login</Button>
-        </Row>
-      </Modal.Body>
+          {/* login button */}
+          <Row className="justify-content-center mb-4">
+            <Button
+              variant="secondary"
+              onClick={closeLoginModal}
+              id="loginButton"
+            >
+              Login
+            </Button>
+          </Row>
 
-      <Modal.Footer id='loginModalFooter'>
-         {/* link to sign up form. */}
-         <Row>
-          <Form.Label><i className='text-muted'>First visit to Hela Athlam?
-            
-            here.</i>
-          </Form.Label>
-        </Row>
+          <Row>
+            <Col className="d-flex justify-content-center align-items-center" >
+              <Form.Label className="text-muted mb-0 me-1">
+                First visit to Hela Athkam?
+              </Form.Label>
 
-         
-      </Modal.Footer>
-    </Modal>
+              <Nav.Link 
+              as='span' 
+              onClick={() => {closeLoginModal(); openSignModal(); }} 
+              style={{cursor: 'pointer', color: 'blue'}}>Sign Up</Nav.Link>
 
+              <Form.Label className='text-muted mb-0 ms-1'>here.</Form.Label>
+            </Col>
+          </Row>
+        </Modal.Body>
+
+      </Modal>
+    </>
   );
 }
 

@@ -34,7 +34,7 @@ function Header({ openLoginModal, openSignModal }) {
       >
         <Container>
           <Navbar.Brand id="mainBrand">
-            <h1>Hela Athkam</h1>
+            <h1>HELA ATHKAM</h1>
           </Navbar.Brand>
           <Nav>
             <Nav.Link className="mainNavlink" onClick={openSignModal}>
