@@ -1,16 +1,52 @@
-import { Modal, Button } from 'react-bootstrap';
-import { Row, Col } from 'react-bootstrap';
+import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import { InputGroup } from 'react-bootstrap';
 import { EnvelopeAt, Key } from 'react-bootstrap-icons';
+import { useState } from 'react';
+import {useNavigate} from "react-router-dom";
+import { validateLogin } from '../Asset/Script/authValidation';
+import axios from "axios";
 // For form management and data validation import - formik yup.
 
 // import Hela athkam: form css file.
 import '../Asset/Style/Helaathkam_Form.css';
 
 function Login({ isModalOpen, closeLoginModal, openSignModal}) {
-  return (
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const[error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // validate email and password.
+    const validationError = validateLogin(email, password);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+        email,
+        password
+      });
+
+      if (response.data.success) {
+        localStorage.setItem('token', response.data.token);
+        navigate('/dashboard');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
+    }
+  };
+
+
+
+    return (
     <>
       {/* login modal */}
       <Modal
@@ -29,6 +65,7 @@ function Login({ isModalOpen, closeLoginModal, openSignModal}) {
 
         {/* login form content within modal body. */}
         <Modal.Body id="loginModalBody">
+          <Form onsubmit={handleSubmit}>
           <Row className="mb-5"></Row>
 
           {/* login form email */}
@@ -44,6 +81,7 @@ function Login({ isModalOpen, closeLoginModal, openSignModal}) {
                   type="email"
                   aria-label="UserEmail"
                   aria-describedby="email"
+                  onChange={(e) => setEmail(e.target.value)}
                   autoFocus
                 />
               </InputGroup>
@@ -64,6 +102,8 @@ function Login({ isModalOpen, closeLoginModal, openSignModal}) {
                   type="password"
                   aria-label="UserPwd1"
                   aria-describedby="password1"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </InputGroup>
             </Col>
@@ -74,8 +114,9 @@ function Login({ isModalOpen, closeLoginModal, openSignModal}) {
           <Row className="justify-content-center mb-4">
             <Button
               variant="secondary"
-              onClick={closeLoginModal}
+              onClick={handleSubmit}
               id="loginButton"
+              type="submit"
             >
               Login
             </Button>
@@ -95,6 +136,7 @@ function Login({ isModalOpen, closeLoginModal, openSignModal}) {
               <Form.Label className='text-muted mb-0 ms-1'>here.</Form.Label>
             </Col>
           </Row>
+          </Form>
         </Modal.Body>
 
       </Modal>
