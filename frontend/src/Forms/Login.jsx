@@ -21,26 +21,18 @@ function Login({ isModalOpen, closeLoginModal, openSignModal}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // validate email and password.
-    const validationError = validateLogin(email, password);
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
-        email,
-        password
-      });
-
+      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
       if (response.data.success) {
-        localStorage.setItem('token', response.data.token);
-        navigate('/dashboard');
+        localStorage.setItem('token', response.data.token); // Store JWT
+
+        // Redirect based on a role.
+        response.data.user.role === 'admin'
+          ? navigate('/admin/dashboard')
+          : navigate('/user/userprofile');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      setError(err.response?.data?.message || 'Login failed');
     }
   };
 
