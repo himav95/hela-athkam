@@ -1,4 +1,4 @@
-const userModule = require('../Models/AdminModel');     // imports 'AdminModule' from models.
+const userModule = require('../Models/UserModel');     // imports 'AdminModule' from models.
 
  /* imports 'bcrypt' module for hashing passwords securely. 
     allows hashing before storing passwords in db and comparing hashed passwords in authentication. */

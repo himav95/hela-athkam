@@ -1,39 +1,28 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const PaymentRoutes = require('./PaymentRoutes');
 
+// Initialize environment variables
 dotenv.config();
 
 const app = express();
 
-// Enable CORS for all routes
-const corsOptions = {
-    origin: function (origin, callback) {
-        const allowedOrigins = ['https://localhost:3000', 'https://yourotherdomain.com'];
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-};
+// CORS Configuration (Dev-only simplified version)
+app.use(cors({
+    origin: 'http://localhost:3000', // Your React frontend URL
+    credentials: true, // Allow cookies/auth headers if needed
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+}));
 
-app.use(cors(corsOptions));
-
+// Middleware to parse JSON requests
 app.use(express.json());
 
-// Mount the payment routes.
-app.use('/api/payments', Payme);
+// Auth Routes (Login/Register)
+const authRoutes = require('./Routes/AuthRoutes'); // Path to your auth routes
+app.use('/api/auth', authRoutes);
 
-
-const port = process.env.PORT;
+// Start Server
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`✅ Server running on http://localhost:${port}`);
 });
-
-
-
-

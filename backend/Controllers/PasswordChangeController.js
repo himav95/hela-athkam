@@ -1,4 +1,4 @@
-const userModule = require('../Models/AdminModel');
+const userModule = require('../Models/UserModel');
 
 const updatePassword = async (req, res, next) => {
     try {

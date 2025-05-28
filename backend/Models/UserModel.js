@@ -1,35 +1,41 @@
-/* import sequelize object and datatypes from "./sequelizeInit" module : To interact with database and 
-define the types of data fields in the model. */
-const {sequelize, DataTypes} = require("./SequelizeInit");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../Config/db');
+const bcrypt = require('bcrypt');
 
-// defines 'admins' model and specifies the structure of 'admins' table in database.
-const Admin = sequelize.define('admins', {
-    name: { 
+const User = sequelize.define('User', {
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    email: {
         type: DataTypes.STRING,
         allowNull: false,
-    },
-
-    email: { 
-        type: DataTypes.STRING,
         unique: true,
-        allowNull: false,
+        validate: {
+            isEmail: true
+        }
     },
-
     password: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: 'password_hash', // Maps to database column name
+        set(value) {
+            // Auto-hash password when setting
+            const saltRounds = 10;
+            const hashedPassword = bcrypt.hashSync(value, saltRounds);
+            this.setDataValue('password', hashedPassword);
+        }
     },
-
-    createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-    },
-
-    updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-    },
+    role: {
+        type: DataTypes.ENUM('user', 'admin'),
+        defaultValue: 'user'
+    }
+}, {
+    tableName: 'users',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    underscored: true
 });
 
-// admin.sync ({ alter: true });
-module.exports = Admin;
+module.exports = User;

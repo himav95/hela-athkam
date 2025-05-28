@@ -20,9 +20,17 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // Handle input changes
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(''); // Clear previous errors
 
     // Validate inputs
     const validationError = validateSignUp(
@@ -47,12 +55,16 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
       if (response.data.success) {
         localStorage.setItem('token', response.data.token);
         closeSignModal(); // Close modal first
-        // Then redirect to user profile
+        // Redirect to user profile (new users are 'user' role by default)
         navigate('/user/userprofile');
       }
 
     } catch (err) {
-      setError(err.response?.data?.message || 'Sign Up failed');
+      const errorMessage = err.response?.data?.message ||
+        err.message ||
+        'Registration failed (server error)';
+      setError(errorMessage);
+      console.error("Registration error:", err);
     }
   };
 
@@ -69,7 +81,7 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
         <Form onSubmit={handleSubmit}>
           <Row className="mb-4"></Row>
 
-          {/* full name. */}
+          {/* Full Name */}
           <Row className="mb-3">
             <Col></Col>
             <Col xs={6}>
@@ -80,20 +92,23 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
                 <Form.Control
                   placeholder="Enter your Full Name"
                   type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   aria-label="Username"
                   aria-describedby="fullName"
                   autoFocus
+                  required
                 />
               </InputGroup>
             </Col>
             <Col></Col>
           </Row>
 
-          {/* email. */}
+          {/* Email */}
           <Row className='mb-3'>
             <Col></Col>
             <Col xs={6}>
-
               <InputGroup className="mb-3" size='sm'>
                 <InputGroup.Text id="email">
                   <EnvelopeAt size={20} color="#176b87" />
@@ -101,15 +116,19 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
                 <Form.Control
                   placeholder="Enter Your E-mail Address"
                   type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   aria-label="UserEmail"
                   aria-describedby="email"
+                  required
                 />
               </InputGroup>
             </Col>
             <Col></Col>
           </Row>
 
-          {/* password */}
+          {/* Password */}
           <Row className="mb-3">
             <Col></Col>
             <Col xs={6}>
@@ -120,15 +139,19 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
                 <Form.Control
                   placeholder="Enter Password"
                   type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   aria-label="UserPwd1"
                   aria-describedby="password1"
+                  required
                 />
               </InputGroup>
             </Col>
             <Col></Col>
           </Row>
 
-          {/* confirm password */}
+          {/* Confirm Password */}
           <Row className='mb-5'>
             <Col></Col>
             <Col xs={6}>
@@ -139,19 +162,23 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
                 <Form.Control
                   placeholder="Confirm Password"
                   type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
                   aria-label="UserPwd2"
                   aria-describedby="password2"
+                  required
                 />
               </InputGroup>
             </Col>
             <Col></Col>
           </Row>
 
-          {/* sign up button. */}
+          {/* Sign Up Button */}
           <Row className="justify-content-center mb-3">
             <Button
               variant="secondary"
-              onClick={closeSignModal}
+              type="submit"
               id="signUpButton"
             >
               Sign Up
@@ -164,8 +191,12 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
                 Already have an account?
               </Form.Label>
 
-              <Nav.Link as="span" onClick={() => {closeSignModal(); openLoginModal(); }}
-                        style={{cursor: 'pointer', color: 'blue'}} > Login
+              <Nav.Link
+                as="span"
+                onClick={() => {closeSignModal(); openLoginModal(); }}
+                style={{cursor: 'pointer', color: 'blue'}}
+              >
+                Login
               </Nav.Link>
 
               <Form.Label className='text-muted mb-0 ms-1'>here.</Form.Label>

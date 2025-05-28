@@ -10,6 +10,6 @@ welcome.get('/', function (req, res) {
 );
 
 // login authentication
-welcome.post('/login', loginAuth);
+welcome.post('/login', login);
 
 module.exports = welcome;

@@ -1,4 +1,4 @@
-const AdminModel = require('../Models/AdminModel');
+const AdminModel = require('../Models/UserModel');
 const bcrypt = require("bcrypt");
 
 const updatePassword = async (req, res) => {
