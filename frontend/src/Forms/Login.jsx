@@ -4,63 +4,64 @@ import Nav from 'react-bootstrap/Nav';
 import { InputGroup } from 'react-bootstrap';
 import { EnvelopeAt, Key } from 'react-bootstrap-icons';
 import { useState } from 'react';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { validateLogin } from '../Asset/Script/authValidation';
 import axios from "axios";
-// For form management and data validation import - formik yup.
+import '../Asset/Style/Helaathkam_Form.css'; // hela athkam form css file is here.
 
-// import Hela athkam: form css file.
-import '../Asset/Style/Helaathkam_Form.css';
-
-function Login({ isModalOpen, closeLoginModal, openSignModal}) {
-
+function Login({ isModalOpen, closeLoginModal, openSignModal }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const[error, setError] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-      if (response.data.success) {
-        localStorage.setItem('token', response.data.token); // Store JWT
 
-        // Redirect based on a role.
+    // Validate inputs first
+    const validationError = validateLogin(email, password);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+        email, password
+      });
+
+      if (response.data.success) {
+        localStorage.setItem('token', response.data.token);
+        closeLoginModal(); // Close modal first
+        // Then redirect based on role
         response.data.user.role === 'admin'
           ? navigate('/admin/dashboard')
           : navigate('/user/userprofile');
       }
+
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      const errorMessage = err.response?.data?.message ||
+        err.message ||
+        'Login failed (server error)';
+      setError(errorMessage);
+      console.error("Login error:", err); // Debugging
     }
-  };
+  }
 
 
+  return (
+    <Modal show={isModalOpen} onHide={closeLoginModal} backdrop="static" size="lg" dialogClassName="loginModal" centered>
+      <Modal.Header id="loginModalHeader" closeButton>
+        <Modal.Title>
+          <h3 className="text-muted ms-3">HELA ATHKAM : Login</h3>
+        </Modal.Title>
+      </Modal.Header>
 
-    return (
-    <>
-      {/* login modal */}
-      <Modal
-        show={isModalOpen}
-        onHide={closeLoginModal}
-        backdrop="static"
-        size="lg"
-        dialogClassName="loginModal"
-        centered
-      >
-        <Modal.Header id="loginModalHeader" closeButton>
-          <Modal.Title>
-            <h3 className="text-muted ms-3">HELA ATHKAM : Login</h3>
-          </Modal.Title>
-        </Modal.Header>
-
-        {/* login form content within modal body. */}
-        <Modal.Body id="loginModalBody">
-          <Form onsubmit={handleSubmit}>
+      <Modal.Body id="loginModalBody">
+        {error && <div className="alert alert-danger">{error}</div>}
+        <Form onSubmit={handleSubmit}>
           <Row className="mb-5"></Row>
 
-          {/* login form email */}
           <Row className="mb-4">
             <Col></Col>
             <Col xs={6}>
@@ -73,6 +74,7 @@ function Login({ isModalOpen, closeLoginModal, openSignModal}) {
                   type="email"
                   aria-label="UserEmail"
                   aria-describedby="email"
+                  value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   autoFocus
                 />
@@ -81,7 +83,6 @@ function Login({ isModalOpen, closeLoginModal, openSignModal}) {
             <Col></Col>
           </Row>
 
-          {/* login form password */}
           <Row className="mb-5">
             <Col></Col>
             <Col xs={6}>
@@ -102,37 +103,30 @@ function Login({ isModalOpen, closeLoginModal, openSignModal}) {
             <Col></Col>
           </Row>
 
-          {/* login button */}
           <Row className="justify-content-center mb-4">
-            <Button
-              variant="secondary"
-              onClick={handleSubmit}
-              id="loginButton"
-              type="submit"
-            >
+            <Button variant="secondary" id="loginButton" type="submit">
               Login
             </Button>
           </Row>
 
           <Row>
-            <Col className="d-flex justify-content-center align-items-center" >
+            <Col className="d-flex justify-content-center align-items-center">
               <Form.Label className="text-muted mb-0 me-1">
                 First visit to Hela Athkam?
               </Form.Label>
-
-              <Nav.Link 
-              as='span' 
-              onClick={() => {closeLoginModal(); openSignModal(); }} 
-              style={{cursor: 'pointer', color: 'blue'}}>Sign Up</Nav.Link>
-
+              <Nav.Link
+                as='span'
+                onClick={() => { closeLoginModal(); openSignModal(); }}
+                style={{cursor: 'pointer', color: 'blue'}}
+              >
+                Sign Up
+              </Nav.Link>
               <Form.Label className='text-muted mb-0 ms-1'>here.</Form.Label>
             </Col>
           </Row>
-          </Form>
-        </Modal.Body>
-
-      </Modal>
-    </>
+        </Form>
+      </Modal.Body>
+    </Modal>
   );
 }
 
