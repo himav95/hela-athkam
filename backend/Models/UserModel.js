@@ -29,6 +29,18 @@ const User = sequelize.define('User', {
     role: {
         type: DataTypes.ENUM('user', 'admin'),
         defaultValue: 'user'
+    },
+
+    phone: {
+        type: DataTypes.STRING(20),
+        allowNull: true,
+        validate: {
+            len: [10, 20] // Phone number should be between 10-20 characters
+        }
+    },
+    address: {
+        type: DataTypes.TEXT,
+        allowNull: true
     }
 }, {
     tableName: 'users',

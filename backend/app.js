@@ -15,6 +15,9 @@ const sequelize = require('./Config/db');
 const authRoutes = require('./Routes/AuthRoutes');
 app.use('/api/auth', authRoutes);
 
+const userRoutes = require('./routes/userRoutes');
+app.use('/api/users', userRoutes);
+
 // Test database connection
 sequelize.authenticate()
     .then(() => console.log('Database connected!'))

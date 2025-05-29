@@ -1,12 +1,12 @@
-import { Modal, Button, Nav } from 'react-bootstrap';
+import { Modal, Button, Nav, Spinner } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import { Row, Col } from 'react-bootstrap';
 import { InputGroup } from 'react-bootstrap';
 import { EnvelopeAt, Key, Person } from 'react-bootstrap-icons';
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { validateSignUp } from '../Asset/Script/authValidation';
+import { authService } from '../Services/apiService';
 import '../Asset/Style/Helaathkam_Form.css';
 
 function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
@@ -18,6 +18,7 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
   });
 
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   // Handle input changes
@@ -26,6 +27,9 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
       ...formData,
       [e.target.name]: e.target.value
     });
+
+    // Clear error when user starts typing
+    if (error) setError('');
   };
 
   const handleSubmit = async (e) => {
@@ -46,7 +50,9 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', {
+      setLoading(true);
+
+      const response = await authService.register({
         name: formData.name,
         email: formData.email,
         password: formData.password
@@ -65,11 +71,19 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
         'Registration failed (server error)';
       setError(errorMessage);
       console.error("Registration error:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Modal show={isModalOpen} onHide={closeSignModal} backdrop="static" size="lg" centered>
+    <Modal
+      show={isModalOpen}
+      onHide={closeSignModal}
+      backdrop="static"
+      size="lg"
+      centered
+    >
       <Modal.Header id="signUpModalHeader" closeButton>
         <Modal.Title>
           <h3 className="text-muted ms-3">HELA ATHKAM : Sign Up</h3>
@@ -78,6 +92,7 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
 
       <Modal.Body id="signUpModalBody">
         {error && <div className="alert alert-danger">{error}</div>}
+
         <Form onSubmit={handleSubmit}>
           <Row className="mb-4"></Row>
 
@@ -97,6 +112,7 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
                   onChange={handleChange}
                   aria-label="Username"
                   aria-describedby="fullName"
+                  disabled={loading}
                   autoFocus
                   required
                 />
@@ -121,6 +137,7 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
                   onChange={handleChange}
                   aria-label="UserEmail"
                   aria-describedby="email"
+                  disabled={loading}
                   required
                 />
               </InputGroup>
@@ -144,6 +161,7 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
                   onChange={handleChange}
                   aria-label="UserPwd1"
                   aria-describedby="password1"
+                  disabled={loading}
                   required
                 />
               </InputGroup>
@@ -167,6 +185,7 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
                   onChange={handleChange}
                   aria-label="UserPwd2"
                   aria-describedby="password2"
+                  disabled={loading}
                   required
                 />
               </InputGroup>
@@ -180,11 +199,23 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
               variant="secondary"
               type="submit"
               id="signUpButton"
+              disabled={loading}
             >
-              Sign Up
+              {loading && (
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+              )}
+              {loading ? 'Creating Account...' : 'Sign Up'}
             </Button>
           </Row>
 
+          {/* Login Link */}
           <Row>
             <Col className='d-flex justify-content-center align-items-center'>
               <Form.Label className='text-muted mb-0 me-1'>
@@ -193,8 +224,17 @@ function SignUp({ isModalOpen, closeSignModal, openLoginModal }) {
 
               <Nav.Link
                 as="span"
-                onClick={() => {closeSignModal(); openLoginModal(); }}
-                style={{cursor: 'pointer', color: 'blue'}}
+                onClick={() => {
+                  if (!loading) {
+                    closeSignModal();
+                    openLoginModal();
+                  }
+                }}
+                style={{
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  color: loading ? '#6c757d' : 'blue',
+                  opacity: loading ? 0.5 : 1
+                }}
               >
                 Login
               </Nav.Link>
