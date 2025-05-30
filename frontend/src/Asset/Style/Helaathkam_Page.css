@@ -144,6 +144,24 @@
   border-color: #176b87;
 }
 
+/* More details link hover effect  */
+.card-link-hover {
+  color: #007bff;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  font-weight: 500;
+}
+
+.card-link-hover:hover {
+  color: #0056b3;
+  text-decoration: none;
+  transform: translateY(-2px);
+  text-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
 /* -----Order-Online Page css----- */
 #orderContainer {
   height: 25rem;
@@ -175,6 +193,9 @@
   border-style: none;
   background-color: white;
 }
+
+
+
 
 /* -----Contact us page css----- */
 #contactInfoSRowspace {

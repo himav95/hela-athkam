@@ -1,51 +1,43 @@
-// imports sequelize and DataTypes objects form './SequelizeInit'
-const {sequelize, DataTypes} = require('./SequelizeInit');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../Config/db'); // database config
 
-// defines sequelize model 'Product'
-const Product = sequelize.define('Products', {
-    name: {                                           // properties and configurations on 'Products' table/model. colums as name, proce and so on.
-        type: DataTypes.STRING,
-        allowNull: false,
+const Product = sequelize.define('Product', {
+    product_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
     },
-
-    Price: {
-        type: DataTypes.STRING,
-        allowNull: false,
+    product_name: {
+        type: DataTypes.STRING(255),
+        allowNull: false
     },
-
-    description: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-
     category: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: DataTypes.STRING(100),
+        allowNull: false
     },
-
     image: {
-        type: DataTypes.BLOB('long'),
-        allowNull: false,
+        type: DataTypes.STRING(500),
+        allowNull: true
     },
-
-    imageType: {
-        type: DataTypes.STRING,
-        allowNull: true,
+    craftsman_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     },
-
-    createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
+    price: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false
     },
-
-    updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
+    stock: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
     },
-
+    description: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    }
+}, {
+    tableName: 'products',
+    timestamps: false // since we didn't add created_at/updated_at
 });
-
-
-// Product.sync({alter:true}).then(r=>{});
 
 module.exports = Product;

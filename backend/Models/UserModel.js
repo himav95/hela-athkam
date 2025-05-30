@@ -30,7 +30,7 @@ const User = sequelize.define('User', {
         type: DataTypes.ENUM('user', 'admin'),
         defaultValue: 'user'
     },
-
+    // NEW FIELDS ADDED
     phone: {
         type: DataTypes.STRING(20),
         allowNull: true,
