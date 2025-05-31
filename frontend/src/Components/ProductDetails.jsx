@@ -1,6 +1,9 @@
 import { Modal, Row, Col, Button } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 
+// import utility functions
+import { formatProductId } from '../Asset/Script/Utils/productUtilsHelper';
+
 // import Hela athkam: form css file here.
 import '../Asset/Style/Helaathkam_Form.css';
 
@@ -37,6 +40,9 @@ function ProductDetails({
 
             {/* Additional product details in rows */}
             <div className="product-details-section">
+              <Row className="product-detail-row">
+                <Col><span className="detail-label">Product ID:</span> <span className="detail-value">{formatProductId(productData?.product_id)}</span></Col>
+              </Row>
               <Row className="product-detail-row">
                 <Col><span className="detail-label">Category:</span> <span className="detail-value">{productData?.category}</span></Col>
               </Row>

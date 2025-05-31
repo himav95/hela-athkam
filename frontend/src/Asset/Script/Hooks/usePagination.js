@@ -2,7 +2,7 @@
 import { useState, useMemo } from 'react';
 
 /**
- * Custom hook for handling pagination logic
+ * Custom hook for handling pagination logic for paginationComponent.
  * @param {Array} data - Array of items to paginate
  * @param {number} itemsPerPage - Number of items per page (default: 6)
  * @returns {Object} Pagination state and functions
@@ -11,15 +11,18 @@ function usePagination(data, itemsPerPage = 6) {
   // Current page state (starts from 1)
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Ensure data is always an array to prevent .slice() errors
+  const safeData = Array.isArray(data) ? data : [];
+
   // Calculate total pages based on data length
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const totalPages = Math.ceil(safeData.length / itemsPerPage);
 
   // Calculate current items to display using useMemo for performance
   const currentItems = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return data.slice(startIndex, endIndex);
-  }, [data, currentPage, itemsPerPage]);
+    return safeData.slice(startIndex, endIndex);
+  }, [safeData, currentPage, itemsPerPage]);
 
   // Navigation functions
   const goToPage = (pageNumber) => {
@@ -77,7 +80,7 @@ function usePagination(data, itemsPerPage = 6) {
     resetPagination,    // Function to reset to first page
     hasNextPage: currentPage < totalPages,
     hasPrevPage: currentPage > 1,
-    totalItems: data.length
+    totalItems: safeData.length
   };
 }
 

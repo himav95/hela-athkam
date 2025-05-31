@@ -18,7 +18,8 @@ function Products() {
   const [loading, setLoading] = useState(true);
 
   // Pagination hook - shows 6 products per page
-  const paginationData = usePagination(filteredProducts, 6);
+  // Ensure filteredProducts is always an array before passing to usePagination
+  const paginationData = usePagination(Array.isArray(filteredProducts) ? filteredProducts : [], 6);
 
   // Fetch all products on component mount
   useEffect(() => {
@@ -27,7 +28,9 @@ function Products() {
 
   // Reset pagination when filtered products change
   useEffect(() => {
-    paginationData.resetPagination();
+    if (paginationData && paginationData.resetPagination) {
+      paginationData.resetPagination();
+    }
   }, [filteredProducts]);
 
   // Fetch all products from database
@@ -37,10 +40,28 @@ function Products() {
       const response = await fetch('/api/products');
       const data = await response.json();
       console.log('Products fetched:', data);
-      setAllProducts(data);
-      setFilteredProducts(data); // Initially show all products
+
+      // Handle the response structure from your backend
+      let productsArray = [];
+
+      if (data.success && Array.isArray(data.products)) {
+        // Your current backend returns { success: true, products: [...] }
+        productsArray = data.products;
+      } else if (Array.isArray(data)) {
+        // In case backend is changed to return array directly
+        productsArray = data;
+      } else {
+        console.warn('Unexpected API response format:', data);
+        productsArray = [];
+      }
+
+      setAllProducts(productsArray);
+      setFilteredProducts(productsArray); // Initially show all products
     } catch (error) {
       console.error('Error fetching products:', error);
+      // Set empty arrays on error to prevent crashes
+      setAllProducts([]);
+      setFilteredProducts([]);
     } finally {
       setLoading(false);
     }
@@ -106,7 +127,7 @@ function Products() {
 
           {/* Product cards - Display current page products */}
           <Row className="mb-5">
-            {paginationData.currentItems.length > 0 ? (
+            {paginationData.currentItems && paginationData.currentItems.length > 0 ? (
               paginationData.currentItems.map((product) => (
                 <Col key={product.product_id} md={4} className="mb-4">
                   <Card style={{ maxWidth: 250, margin: '0 auto' }}>
