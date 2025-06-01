@@ -38,6 +38,8 @@ import ProfileSide from './Pages/User/Components/ProfileSide';
 import Purchases from './Pages/User/Purchases';
 import UserProfileEdit from './Pages/User/UserProfileEdit';
 
+import { AuthProvider } from './Asset/Script/AuthContext'; // Import AuthProvider
+
 function App() {
   // login and sign up forms modal state and function details.
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
@@ -69,7 +71,6 @@ function App() {
     );
   };
 
-
   const AdminLayout = ({ children }) => {
     return (
       <>
@@ -84,23 +85,25 @@ function App() {
     );
   };
 
-
   const UserProfileLayout = ({ children }) => {
     return (
       <>
-      <ProfileTop />
-      <Row style={{ margin:0 , height: 'calc(100vh - 50px)'}}>
-        <Col xs={2} style={{backgroundColor: '#d6dbdf'}}>
-        <ProfileSide />
-        </Col>
-        <Col xs={10}>{children}</Col>
-      </Row>
+        <ProfileTop />
+        <Row style={{ margin:0 , height: 'calc(100vh - 50px)'}}>
+          <Col xs={2} style={{backgroundColor: '#d6dbdf'}}>
+            <ProfileSide />
+          </Col>
+          <Col xs={10}>{children}</Col>
+        </Row>
       </>
     );
   };
 
   return (
-    <>
+    // AuthProvider wraps the entire app to provide authentication context to all components
+    // This fixes the "useAuth must be used within an AuthProvider" error; came up when trying to use the useAuth hook in components like ProfileTop and Header.
+    // Components like ProfileTop, Header, and any other component can now use useAuth hook
+    <AuthProvider>
       {/* BrowserRouter/ Router; problem occured. instead of wrapping only the Routes container whole app had to be wrapped in. */}
       <BrowserRouter>
         {/* sign and login modal */}
@@ -110,14 +113,14 @@ function App() {
           isModalOpen={isLoginModalOpen}
           closeLoginModal={closeLoginModal}
           openSignModal={() => {
-            closeLoginModal(); 
+            closeLoginModal();
             openSignModal();
           }}
         />
 
         {/* pass modal state and close function to the sign up component. */}
-        <SignUp 
-          isModalOpen={isSignModalOpen} 
+        <SignUp
+          isModalOpen={isSignModalOpen}
           closeSignModal={closeSignModal}
           openLoginModal={() => {
             closeSignModal();
@@ -184,8 +187,7 @@ function App() {
             }
           />
 
-
-        {/* admin dashboard routes. */}
+          {/* admin dashboard routes. */}
           <Route
             path="/admin/dashboard"
             element={
@@ -249,7 +251,7 @@ function App() {
             }
           />
 
-          <Route 
+          <Route
             path="/admin/usermessages"
             element={
               <AdminLayout>
@@ -258,43 +260,39 @@ function App() {
             }
           />
 
-
           {/* User Profile Routes */}
 
           <Route
-          path="/user/userprofile"
-          element={
-            <UserProfileLayout>
-              <UserProfile />
-            </UserProfileLayout>
-          }
+            path="/user/userprofile"
+            element={
+              <UserProfileLayout>
+                <UserProfile />
+              </UserProfileLayout>
+            }
           />
 
           <Route
-          path="/user/purchases"
-          element={
-            <UserProfileLayout>
-              <Purchases />
-            </UserProfileLayout>
-          }
+            path="/user/purchases"
+            element={
+              <UserProfileLayout>
+                <Purchases />
+              </UserProfileLayout>
+            }
           />
 
           <Route
-          path="/user/userprofileedit"
-          element={
-            <UserProfileLayout>
-              <UserProfileEdit />
-            </UserProfileLayout>
-          }
+            path="/user/userprofileedit"
+            element={
+              <UserProfileLayout>
+                <UserProfileEdit />
+              </UserProfileLayout>
+            }
           />
-          
 
         </Routes>
       </BrowserRouter>
-    </>
+    </AuthProvider>
   );
 }
-
-
 
 export default App;

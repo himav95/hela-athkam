@@ -1,46 +1,72 @@
+import React from 'react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { PersonCircle } from 'react-bootstrap-icons';
-
-// import Hela athkam page css  here.
+import { useAuth } from '../../../Asset/Script/AuthContext'; // Import useAuth hook
 import '../../../Asset/Style/Helaathkam_Page.css';
 
 const ProfileTop = () => {
+  // GET USER DATA: Access user info from AuthContext
+  const { user, logout, isAuthenticated, userName } = useAuth();
+
+  // HANDLE LOGOUT: Clear user data and redirect
+  const handleLogout = () => {
+    logout();
+    // Redirect to login page - adjust path as needed
+    window.location.href = '/'; // or use navigate if you're using react-router
+  };
+
+  // HANDLE PASSWORD CHANGE: Navigate to password change page
+  const handlePasswordChange = () => {
+    // Navigate to password change page - adjust path as needed
+    window.location.href = '/user/change-password'; // Update this path
+  };
+
   return (
-    
-      <Navbar
-        sticky="top"
-        style={{ backgroundColor: '#053B50', height: '50px' }}
+    <Navbar
+      sticky="top"
+      style={{ backgroundColor: '#053B50', height: '50px' }}
+    >
+      {/* BRAND/LOGO */}
+      <Navbar.Brand style={{ color: 'white', paddingLeft: '15px' }}>
+        <h4>Hela Athkam</h4>
+      </Navbar.Brand>
+
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="ms-auto d-flex align-items-center">
+          {/* USER ICON */}
+          <PersonCircle
+            style={{
+              color: 'white',
+              fontSize: '1.5rem',
+              marginRight: '25px',
+            }}
+          />
+        </Nav>
+      </Navbar.Collapse>
+
+      {/* USER DROPDOWN: Shows user name and menu options */}
+      <NavDropdown
+        title={isAuthenticated ? userName : "User"} // DYNAMIC TITLE: Shows actual user name
+        id="basic-navbar-dropdown"
+        menuVariant="light"
+        align={'end'}
+        style={{ marginRight: '30px', color: 'white' }}
       >
-        <Navbar.Brand style={{ color: 'white', paddingLeft: '15px' }}>
-          <h4>Hela Athkam</h4>
-        </Navbar.Brand>
+        {/* PASSWORD CHANGE OPTION */}
+        <NavDropdown.Item onClick={handlePasswordChange}>
+          Change Password
+        </NavDropdown.Item>
 
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto d-flex align-items-center">
-            <PersonCircle
-              style={{
-                color: 'white',
-                fontSize: '1.5rem',
-                marginRight: '25px',
-              }}
-            />
-          </Nav>
-        </Navbar.Collapse>
+        {/* DIVIDER */}
+        <NavDropdown.Divider />
 
-        <NavDropdown
-          title="User"
-          id="basic-navbar-dropdown"
-          menuVariant="light"
-          align={'end'}
-          style={{ marginRight: '30px', color: 'white' }}
-        >
-          <NavDropdown.Item href="#action/1">change Password</NavDropdown.Item>
-          <NavDropdown.Divider />
-          <NavDropdown.Item href="#action/4">Log out</NavDropdown.Item>
-        </NavDropdown>
-      </Navbar>
-    
+        {/* LOGOUT OPTION */}
+        <NavDropdown.Item onClick={handleLogout}>
+          Log out
+        </NavDropdown.Item>
+      </NavDropdown>
+    </Navbar>
   );
 };
 

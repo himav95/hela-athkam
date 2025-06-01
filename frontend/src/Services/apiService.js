@@ -34,12 +34,19 @@ apiClient.interceptors.response.use(
 
 // Auth Services are here.
 export const authService = {
+  // LOGIN: Authenticate user with email and password
   login: (email, password) =>
     apiClient.post('/auth/login', { email, password }),
 
+  // REGISTER: Create new user account
   register: (userData) =>
     apiClient.post('/auth/register', userData),
 
+  // PASSWORD CHANGE: Update user's password (NEW FUNCTION)
+  changePassword: (oldPassword, newPassword) =>
+    apiClient.put('/auth/change-password', { oldPassword, newPassword }),
+
+  // LOGOUT: Clear token from localStorage
   logout: () => {
     localStorage.removeItem('token');
   }
@@ -47,12 +54,15 @@ export const authService = {
 
 // User Profile Services are here.
 export const userService = {
+  // GET FULL PROFILE: Fetch complete user profile with all fields
   getProfile: () =>
     apiClient.get('/users/profile'),
 
+  // UPDATE PROFILE: Update user profile information
   updateProfile: (profileData) =>
     apiClient.put('/users/profile', profileData),
 
+  // GET CURRENT USER: Fetch minimal user info (for navbar display)
   getCurrentUser: () =>
     apiClient.get('/users/me')
 };
