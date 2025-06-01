@@ -6,15 +6,26 @@ import { EnvelopeAt, Key } from 'react-bootstrap-icons';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { validateLogin } from '../Asset/Script/authValidation';
-import { authService } from '../Services/apiService';
+import { useAuth } from '../Asset/Script/AuthContext'; // added this to: Use AuthContext instead of direct API
 import '../Asset/Style/Helaathkam_Form.css';
 
-function Login({ isModalOpen, closeLoginModal, openSignModal }) {
+// Added and updated new props for order form context
+function Login({
+                 isModalOpen,
+                 closeLoginModal,
+                 openSignModal,
+                 // new props for order form context
+                 isOrderContext = false,     // True when called from order forms
+                 onLoginSuccess = null       // Callback after successful login
+               }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // AuthContext for consistent state management
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,19 +41,29 @@ function Login({ isModalOpen, closeLoginModal, openSignModal }) {
       setLoading(true);
       setError(""); // Clear previous errors
 
-      const response = await authService.login(email, password);
+      // updated this so: Use AuthContext login instead of direct API call
+      const result = await login(email, password);
 
-      if (response.data.success) {
-        localStorage.setItem('token', response.data.token);
+      if (result.success) {
         closeLoginModal(); // Close modal first
 
-        // Then redirect based on role
-        response.data.user.role === 'admin'
-          ? navigate('/admin/dashboard')
-          : navigate('/user/userprofile');
+        // Handle different contexts
+        if (isOrderContext && onLoginSuccess) {
+          // order form context: Call success callback, don't navigate
+          onLoginSuccess(result.user);
+        } else {
+          // NavBar context: Navigate based on user role
+          result.user.role === 'admin'
+            ? navigate('/admin/dashboard')
+            : navigate('/user/userprofile');
+        }
+      } else {
+        // Handle AuthContext error format
+        setError(result.message || 'Login failed');
       }
 
     } catch (err) {
+      // Error handling is here.
       const errorMessage = err.response?.data?.message ||
         err.message ||
         'Login failed (server error)';
@@ -53,7 +74,7 @@ function Login({ isModalOpen, closeLoginModal, openSignModal }) {
     }
   };
 
-  // Clear error when user starts typing
+  // Handlers for input changes are here.
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
     if (error) setError("");
@@ -75,7 +96,10 @@ function Login({ isModalOpen, closeLoginModal, openSignModal }) {
     >
       <Modal.Header id="loginModalHeader" closeButton>
         <Modal.Title>
-          <h3 className="text-muted ms-3">HELA ATHKAM : Login</h3>
+          <h3 className="text-muted ms-3">
+            {/* updated for different title for order context */}
+            {isOrderContext ? 'Please Login to Place Order' : 'HELA ATHKAM : Login'}
+          </h3>
         </Modal.Title>
       </Modal.Header>
 
@@ -154,7 +178,7 @@ function Login({ isModalOpen, closeLoginModal, openSignModal }) {
             </Button>
           </Row>
 
-          {/* Sign Up Link */}
+          {/* Sign Up link */}
           <Row>
             <Col className="d-flex justify-content-center align-items-center">
               <Form.Label className="text-muted mb-0 me-1">

@@ -3,8 +3,13 @@ import { Modal, Button, Row, Col, Alert, Spinner } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 
+// import AuthContext and Login component
+import { useAuth } from '../Asset/Script/AuthContext';
+import Login from './Login'; // Import Login component
+
 // import form validation js file here.
 import { validateCustomOrder } from '../Asset/Script/formValidation';
+
 // import utility functions
 import { formatProductId, getProductDisplayText } from '../Asset/Script/Utils/productUtilsHelper';
 
@@ -19,7 +24,7 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
     deliveryDate: '',
     imageSketch: null,
     comments: '',
-    orderType: 'existing' // 'existing' or 'custom'
+    orderType: 'existing' // 'existing' or 'custom' // check the orders table for order type. supposed to be bulk or custom.
   });
 
   const [errors, setErrors] = useState({});
@@ -27,6 +32,10 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
   const [loading, setLoading] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [alert, setAlert] = useState({ show: false, type: '', message: '' });
+
+  // Authentication state management
+  const { isAuthenticated, user } = useAuth();
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // Fetch products from API
   useEffect(() => {
@@ -53,6 +62,7 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
     }
   }, [isCustomModalOpen]);
 
+  // Input change handler.
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
 
@@ -81,6 +91,7 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
     }
   };
 
+  // product change handler.
   const handleProductChange = (e) => {
     const selectedProductId = e.target.value;
     const selectedProduct = products.find(p => p.product_id === parseInt(selectedProductId));
@@ -97,9 +108,17 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
     }
   };
 
+  // Authentication check before submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Check authentication first
+    if (!isAuthenticated) {
+      setShowLoginModal(true); // Show login modal instead of submitting
+      return;
+    }
+
+    // Validation.
     const validationErrors = validateCustomOrder(formData);
     setErrors(validationErrors);
 
@@ -107,12 +126,13 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
       try {
         setSubmitLoading(true);
 
-        // Create FormData for file upload
+        // Create FormData for file upload with user_id
         const orderFormData = new FormData();
         orderFormData.append('orderType', formData.orderType);
         orderFormData.append('quantity', formData.quantity);
         orderFormData.append('deliveryDate', formData.deliveryDate);
         orderFormData.append('comments', formData.comments || '');
+        orderFormData.append('userId', user.id); // ADDED: Include user ID from AuthContext
 
         if (formData.orderType === 'existing') {
           orderFormData.append('productId', formData.productId);
@@ -124,11 +144,11 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
           }
         }
 
+        // Use API client that includes auth headers automatically
         const response = await axios.post('/api/orders/custom', orderFormData, {
           headers: {
             'Content-Type': 'multipart/form-data',
-            // Add authorization headers here if needed. later for login checks and what not.
-            // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${localStorage.getItem('token')}` // ADDED: Auth header
           }
         });
 
@@ -164,6 +184,7 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
     }
   };
 
+  // close modal handler.
   const handleClose = () => {
     closeCustomModal();
     setErrors({});
@@ -179,9 +200,24 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
     });
   };
 
+  // Handle successful login from order context
+  const handleLoginSuccess = (userData) => {
+    setShowLoginModal(false);
+    setAlert({
+      show: true,
+      type: 'success',
+      message: `Welcome ${userData.name}! You can now submit your order.`
+    });
+  };
+
+  // Handle login modal close
+  const handleLoginClose = () => {
+    setShowLoginModal(false);
+  };
+
   return (
     <>
-      {/* Custom order modal */}
+      {/* Custom Order modal */}
       <Modal
         show={isCustomModalOpen}
         onHide={handleClose}
@@ -209,7 +245,7 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
               <h6 className="text-muted">Order Type</h6>
             </Row>
 
-            {/* Order Type Selection */}
+            {/* Order Type Selection  */}
             <Row className="mb-4">
               <Col>
                 <Form.Check
@@ -235,6 +271,7 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
               </Col>
             </Row>
 
+            {/* Conditional rendering */}
             {formData.orderType === 'existing' ? (
               <>
                 {/* Existing Product Selection */}
@@ -335,7 +372,7 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
               </>
             )}
 
-            {/* Common Fields */}
+            {/* Common Fields  */}
             <Row className="mb-3">
               <h6 className="text-muted">Order Details</h6>
             </Row>
@@ -407,6 +444,7 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
           </Form>
         </Modal.Body>
 
+        {/* modal footer */}
         <Modal.Footer>
           <Button
             id="customSubmitButton"
@@ -437,6 +475,18 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {/* Login Modal for Order Context */}
+      <Login
+        isModalOpen={showLoginModal}
+        closeLoginModal={handleLoginClose}
+        openSignModal={() => {
+          // Handle signup modal if you have one
+          console.log('Open signup modal from order context');
+        }}
+        isOrderContext={true}
+        onLoginSuccess={handleLoginSuccess}
+      />
     </>
   );
 }

@@ -3,8 +3,13 @@ import { Modal, Button, Row, Col, Alert, Spinner } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 
+// import AuthContext and Login component
+import { useAuth } from '../Asset/Script/AuthContext';
+import Login from './Login'; // Import your existing Login component
+
 // import form validation js file here.
 import { validateBulkOrder } from '../Asset/Script/formValidation';
+
 // import utility functions
 import { formatProductId, getProductDisplayTextWithPrice } from '../Asset/Script/Utils/productUtilsHelper';
 
@@ -26,6 +31,10 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
   const [loading, setLoading] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [alert, setAlert] = useState({ show: false, type: '', message: '' });
+
+  // Authentication state management
+  const { isAuthenticated, user } = useAuth();
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // Fetch products from API
   useEffect(() => {
@@ -52,6 +61,7 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
     }
   }, [isNormalModalOpen]);
 
+  // Input change handler.
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -78,9 +88,17 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
     }
   };
 
+  // Authentication check before submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Check authentication first
+    if (!isAuthenticated) {
+      setShowLoginModal(true); // Show login modal instead of submitting
+      return;
+    }
+
+    // Validate form data
     const validationErrors = validateBulkOrder(formData);
     setErrors(validationErrors);
 
@@ -88,19 +106,21 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
       try {
         setSubmitLoading(true);
 
+        // include user_id from authenticated user
         const orderData = {
           productId: parseInt(formData.productId),
           quantity: parseInt(formData.quantity),
           deliveryDate: formData.deliveryDate,
           deliveryOption: formData.deliveryOption,
-          comments: formData.comments || null
+          comments: formData.comments || null,
+          userId: user.id // ADDED: Include user ID from AuthContext
         };
 
+        // updated this: Use API client that includes auth headers automatically
         const response = await axios.post('/api/orders/bulk', orderData, {
           headers: {
             'Content-Type': 'application/json',
-            // Add authorization headers here if needed, later for login checks
-            // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${localStorage.getItem('token')}` // ADDED: Auth header
           }
         });
 
@@ -136,6 +156,7 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
     }
   };
 
+  // close modal handler.
   const handleClose = () => {
     closeNormalModal();
     setErrors({});
@@ -150,9 +171,24 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
     });
   };
 
+  // Handle successful login from order context
+  const handleLoginSuccess = (userData) => {
+    setShowLoginModal(false);
+    setAlert({
+      show: true,
+      type: 'success',
+      message: `Welcome ${userData.name}! You can now submit your order.`
+    });
+  };
+
+  // Handle login modal close
+  const handleLoginClose = () => {
+    setShowLoginModal(false);
+  };
+
   return (
     <>
-      {/* Bulk/Normal order modal */}
+      {/* Bulk Order modal */}
       <Modal
         show={isNormalModalOpen}
         onHide={handleClose}
@@ -321,7 +357,7 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
               <Col></Col>
             </Row>
 
-            {/* Bulk/normal order form close and submit buttons. */}
+            {/* Submit and cancel buttons */}
             <Row>
               <Col>
                 <Button
@@ -352,6 +388,18 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
           </Form>
         </Modal.Body>
       </Modal>
+
+      {/* Login Modal for Order Context */}
+      <Login
+        isModalOpen={showLoginModal}
+        closeLoginModal={handleLoginClose}
+        openSignModal={() => {
+          // Handle signup modal if you have one
+          console.log('Open signup modal from order context');
+        }}
+        isOrderContext={true}
+        onLoginSuccess={handleLoginSuccess}
+      />
     </>
   );
 }

@@ -1,3 +1,5 @@
+// User table model.
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('../Config/db');
 const bcrypt = require('bcrypt');
