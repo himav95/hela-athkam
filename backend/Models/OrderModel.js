@@ -16,7 +16,7 @@ const Order = sequelize.define('Order', {
         }
     },
     product_id: {
-        type: DataTypes.INTEGER, // Changed from STRING(50) to INTEGER
+        type: DataTypes.INTEGER,
         allowNull: true, // For existing products from products table
         references: {
             model: 'products',
@@ -56,7 +56,7 @@ const Order = sequelize.define('Order', {
         defaultValue: 'draft'
     },
     order_type: {
-        type: DataTypes.ENUM('bulk', 'custom'),
+        type: DataTypes.ENUM('bulk', 'edition', 'custom'), // UPDATED: Added 'edition'
         allowNull: false
     },
 

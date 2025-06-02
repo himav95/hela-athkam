@@ -7,6 +7,7 @@ const {
     createCustomOrder,
     getOrders,
     getOrderById,
+    updateOrderStatus, // Added newly: Import the new function for updating order status
     bulkOrderValidationRules,
     customOrderValidationRules
 } = require('../Controllers/OrderController');
@@ -37,6 +38,12 @@ router.get('/',
 router.get('/:id',
     authenticateToken,
     getOrderById
+);
+
+// Added: PUT /api/orders/:id/status - Update order status (admin/manager only)
+router.put('/:id/status',
+    authenticateToken,
+    updateOrderStatus
 );
 
 module.exports = router;

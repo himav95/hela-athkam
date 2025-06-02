@@ -22,6 +22,7 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
     productName: '',
     quantity: '',
     deliveryDate: '',
+    deliveryOption: '', // Added: Delivery option field
     imageSketch: null,
     comments: '',
     orderType: 'existing' // 'existing' or 'custom' // check the orders table for order type. supposed to be bulk or custom.
@@ -131,6 +132,7 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
         orderFormData.append('orderType', formData.orderType);
         orderFormData.append('quantity', formData.quantity);
         orderFormData.append('deliveryDate', formData.deliveryDate);
+        orderFormData.append('deliveryOption', formData.deliveryOption); // ADDED: Include delivery option
         orderFormData.append('comments', formData.comments || '');
         orderFormData.append('userId', user.id); // ADDED: Include user ID from AuthContext
 
@@ -145,8 +147,7 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
         }
 
         // Use API client that includes auth headers automatically
-        const response = await axios.post('/api/orders/custom', orderFormData, {
-          headers: {
+        const response = await axios.post('http://localhost:5000/api/orders/custom', orderFormData, {          headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${localStorage.getItem('token')}` // ADDED: Auth header
           }
@@ -194,6 +195,7 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
       productName: '',
       quantity: '',
       deliveryDate: '',
+      deliveryOption: '', // ADDED: Reset delivery option
       imageSketch: null,
       comments: '',
       orderType: 'existing'
@@ -376,9 +378,11 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
             <Row className="mb-3">
               <h6 className="text-muted">Order Details</h6>
             </Row>
+
+            {/* UPDATED: Quantity and Delivery Date side by side */}
             <Row className="mb-3">
               <Col></Col>
-              <Col xs={8}>
+              <Col xs={4}>
                 <Form.Group controlId="quantity">
                   <Form.Label className="customLabel">
                     Quantity <Form.Label className="required">*</Form.Label>
@@ -398,11 +402,7 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
                   </Form.Control.Feedback>
                 </Form.Group>
               </Col>
-              <Col></Col>
-            </Row>
-            <Row className="mb-3">
-              <Col></Col>
-              <Col xs={8}>
+              <Col xs={4}>
                 <Form.Group controlId="deliveryDate">
                   <Form.Label className="customLabel">
                     Preferred Delivery Date <Form.Label className="required">*</Form.Label>
@@ -423,6 +423,44 @@ function CustomOrder({ isCustomModalOpen, closeCustomModal }) {
               </Col>
               <Col></Col>
             </Row>
+
+            {/* ADDED: Delivery Options */}
+            <Row className="mb-3">
+              <Col></Col>
+              <Col xs={8}>
+                <Form.Group>
+                  <Form.Label className="customLabel">
+                    Delivery Option <Form.Label className="required">*</Form.Label>
+                  </Form.Label>
+                  <div className="mt-2">
+                    <Form.Check
+                      type="radio"
+                      name="deliveryOption"
+                      value="pickup"
+                      label="Pick Up"
+                      checked={formData.deliveryOption === 'pickup'}
+                      onChange={handleInputChange}
+                      className="mb-2"
+                    />
+                    <Form.Check
+                      type="radio"
+                      name="deliveryOption"
+                      value="delivery"
+                      label="Delivery"
+                      checked={formData.deliveryOption === 'delivery'}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  {errors.deliveryOption && (
+                    <div className="text-danger small mt-1">
+                      {errors.deliveryOption}
+                    </div>
+                  )}
+                </Form.Group>
+              </Col>
+              <Col></Col>
+            </Row>
+
             <Row className="mb-3">
               <Col></Col>
               <Col xs={8}>

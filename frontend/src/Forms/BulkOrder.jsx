@@ -117,8 +117,7 @@ function BulkOrder({ isNormalModalOpen, closeNormalModal }) {
         };
 
         // updated this: Use API client that includes auth headers automatically
-        const response = await axios.post('/api/orders/bulk', orderData, {
-          headers: {
+        const response = await axios.post('http://localhost:5000/api/orders/bulk', orderData, {          headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('token')}` // ADDED: Auth header
           }

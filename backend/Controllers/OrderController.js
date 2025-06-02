@@ -11,8 +11,8 @@ const bulkOrderValidationRules = [
         .withMessage('Valid product ID is required'),
 
     body('quantity')
-        .isInt({ min: 1 })
-        .withMessage('Quantity must be at least 1'),
+        .isInt({ min: 10 })
+        .withMessage('Quantity must be at least 10'),
 
     body('deliveryDate')
         .isISO8601()
@@ -72,6 +72,10 @@ const customOrderValidationRules = [
             return true;
         }),
 
+    body('deliveryOption') // Added validation for delivery option. custom file did not have this before.
+        .isIn(['pickup', 'delivery'])
+        .withMessage('Delivery option must be either pickup or delivery'),
+
     body('comments')
         .optional()
         .isLength({ max: 1000 })
@@ -120,8 +124,8 @@ const createBulkOrder = async (req, res) => {
             total_amount: totalAmount,
             delivery_date: deliveryDate,
             delivery_type: deliveryOption,
-            order_type: 'bulk',
-            order_status: 'pending',
+            order_type: 'bulk', // updated to set as 'bulk'
+            order_status: 'draft', // Updated to Start as 'draft'
             comments: comments || null
         });
 
@@ -135,6 +139,7 @@ const createBulkOrder = async (req, res) => {
                 total_amount: order.total_amount,
                 delivery_date: order.delivery_date,
                 delivery_type: order.delivery_type,
+                order_type: order.order_type,
                 order_status: order.order_status,
                 created_at: order.created_at
             }
@@ -166,12 +171,13 @@ const createCustomOrder = async (req, res) => {
             });
         }
 
-        const { orderType, productId, productName, quantity, deliveryDate, comments } = req.body;
+        const { orderType, productId, productName, quantity, deliveryDate, deliveryOption, comments } = req.body;
         const userId = req.user.id;
 
         let finalProductId = null;
         let finalProductName = '';
         let unitPrice = 0;
+        let finalOrderType = '';
 
         if (orderType === 'existing') {
             // Find the existing product
@@ -186,10 +192,12 @@ const createCustomOrder = async (req, res) => {
             finalProductId = productId;
             finalProductName = product.product_name;
             unitPrice = product.price;
+            finalOrderType = 'edition'; // updated to set as 'edition' for existing products ih hela athkam products table.
         } else {
             // Custom design
             finalProductName = productName || 'Custom Design';
             unitPrice = 0; // Price to be determined later
+            finalOrderType = 'custom'; // updated to set as 'custom' for custom designs: new creative orders.
         }
 
         // Handle uploaded image
@@ -210,9 +218,9 @@ const createCustomOrder = async (req, res) => {
             unit_price: unitPrice,
             total_amount: totalAmount,
             delivery_date: deliveryDate,
-            delivery_type: 'pickup', // Default for custom orders
-            order_type: 'custom',
-            order_status: 'pending',
+            delivery_type: deliveryOption, // update; use the provided delivery option
+            order_type: finalOrderType, // updated; use the determined order type
+            order_status: 'draft', // update; start as 'draft' till, admin approves.
             image_sketch_url: imageSketchUrl,
             comments: comments || null
         });
@@ -226,6 +234,7 @@ const createCustomOrder = async (req, res) => {
                 quantity: order.quantity,
                 total_amount: order.total_amount,
                 delivery_date: order.delivery_date,
+                delivery_type: order.delivery_type,
                 order_type: order.order_type,
                 order_status: order.order_status,
                 image_sketch_url: order.image_sketch_url,
@@ -285,7 +294,7 @@ const getOrders = async (req, res) => {
             attributes: [
                 'order_id', 'product_name', 'quantity', 'unit_price', 'total_amount',
                 'delivery_date', 'delivery_type', 'order_type', 'order_status',
-                'image_sketch_url', 'comments', 'created_at'
+                'image_sketch_url', 'comments', 'manager_approved', 'created_at'
             ],
             order: [['created_at', 'DESC']],
             limit: parseInt(limit),
@@ -334,7 +343,7 @@ const getOrderById = async (req, res) => {
                 'order_id', 'product_id', 'product_name', 'quantity', 'unit_price',
                 'total_amount', 'delivery_date', 'delivery_type', 'order_type',
                 'order_status', 'image_sketch_url', 'comments', 'advance_payment',
-                'remaining_payment', 'is_fully_paid', 'created_at'
+                'remaining_payment', 'is_fully_paid', 'manager_approved', 'created_at'
             ]
         });
 
@@ -360,11 +369,79 @@ const getOrderById = async (req, res) => {
     }
 };
 
+// Added: Update order status (for admin/manager) so order be "pending" or "completed" or "cancelled"
+const updateOrderStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status, managerNotes } = req.body;
+        const userId = req.user.id;
+        const userRole = req.user.role;
+
+        // Only admin or manager can update order status
+        if (userRole !== 'admin' && userRole !== 'manager') {
+            return res.status(403).json({
+                success: false,
+                message: 'Access denied. Only admins and managers can update order status.'
+            });
+        }
+
+        // Validate status
+        const validStatuses = ['draft', 'pending', 'completed', 'cancelled'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid status. Must be one of: ' + validStatuses.join(', ')
+            });
+        }
+
+        const order = await Order.findByPk(id);
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: 'Order not found'
+            });
+        }
+
+        // Update order
+        const updateData = {
+            order_status: status
+        };
+
+        // If moving from draft to pending, mark as manager approved
+        if (order.order_status === 'draft' && status === 'pending') {
+            updateData.manager_approved = true;
+            updateData.manager_approved_by = userId;
+            updateData.manager_approved_at = new Date();
+        }
+
+        await order.update(updateData);
+
+        res.json({
+            success: true,
+            message: 'Order status updated successfully',
+            order: {
+                order_id: order.order_id,
+                order_status: order.order_status,
+                manager_approved: order.manager_approved
+            }
+        });
+
+    } catch (error) {
+        console.error('Update order status error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error while updating order status',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+};
+
 module.exports = {
     createBulkOrder,
     createCustomOrder,
     getOrders,
     getOrderById,
+    updateOrderStatus, // newly added function exported here.
     bulkOrderValidationRules,
     customOrderValidationRules
 };
