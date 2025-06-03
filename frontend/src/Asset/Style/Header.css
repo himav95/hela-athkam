@@ -8,14 +8,126 @@
 .mainNavlink {
   color: #053b50 !important;
   font-weight: bold;
+  padding: 8px 16px !important;
+  margin: 0 4px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  text-decoration: none;
 }
 
 .mainNavlink:hover {
-  color: rgb(255, 213, 0) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Sign Up button specific styling */
+.signup-btn {
+  background-color: #a2d9ce;
+  color: #025464 !important;
+  border: 2px solid #a2d9ce;
+}
+
+.signup-btn:hover {
+  background-color: #025464 !important;
+  color: #ffffff !important;
+  border: 2px solid #025464;
+}
+
+/* Login button specific styling */
+.login-btn {
+  background-color: transparent;
+  color: #053b50 !important;
+  border: 2px solid #053b50;
+}
+
+.login-btn:hover {
+  background-color: #053b50 !important;
+  color: #ffffff !important;
+  border: 2px solid #053b50;
 }
 
 #mainNavbar {
   height: 5rem;
+}
+
+/* ------User Profile Section------ */
+.user-profile-toggle {
+  color: #053b50 !important;
+  padding: 8px 12px !important;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  background-color: #f8f9fa;
+  text-decoration: none !important;
+}
+
+.user-profile-toggle:hover {
+  background-color: #e9ecef;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #025464 !important;
+}
+
+.user-profile-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(2, 84, 100, 0.25);
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #025464, #a2d9ce);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-name {
+  font-weight: 600;
+  color: #053b50;
+  font-size: 0.95rem;
+  margin-left: 0.5rem;
+}
+
+/* ------Profile Dropdown Styles------ */
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 0.5rem 0;
+  min-width: 200px;
+  margin-top: 0.5rem;
+  z-index: 1050 !important; /* This fixes the dropdown appearing behind page navbar */
+}
+
+.dropdown-item {
+  padding: 0.75rem 1.25rem;
+  color: #053b50;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+  color: #025464;
+  transform: translateX(2px);
+}
+
+.dropdown-item i {
+  color: #a2d9ce;
+  width: 18px;
+}
+
+.dropdown-divider {
+  margin: 0.5rem 1rem;
+  border-color: #e9ecef;
 }
 
 /* ------Page navbar content------ */
@@ -51,4 +163,36 @@
 
 .pageLink:hover {
   color: aqua !important;
+}
+
+/* ------Responsive Design------ */
+@media (max-width: 768px) {
+  .mainNavlink {
+    padding: 6px 12px !important;
+    margin: 0 2px;
+    font-size: 0.9rem;
+  }
+
+  #mainNavbar {
+    height: auto;
+    padding: 1rem 0;
+  }
+
+  .user-name {
+    display: none;
+  }
+
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+
+  .user-profile-toggle {
+    padding: 6px 8px !important;
+  }
+
+  .dropdown-menu {
+    min-width: 180px;
+  }
 }
