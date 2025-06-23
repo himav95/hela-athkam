@@ -1,102 +1,228 @@
-import {Row, Col, Card, Button, Form, Table, Pagination} from 'react-bootstrap';
-import { PencilSquare, TrashFill, Eye, Check2Circle, XCircle, PlusLg } from 'react-bootstrap-icons';
-import { useState } from 'react';
-import ViewModal from './Components/ViewModal';
-
-
-// import Hela athkam: page css file here.
+import { Row, Col, Card, Button, Form, Table, Pagination, Badge } from 'react-bootstrap';
+import { PencilSquare, TrashFill, Check2Circle, XCircle, Eye, PlusLg } from 'react-bootstrap-icons';
+import { useState, useEffect } from 'react';
+import ViewModal from '../Admin/Components/ViewModal';
+import adminOrderService from "../../Services/adminOrderService";
+import axios from 'axios';
 import '../../Asset/Style/Helaathkam_Page.css';
 
-function OrderCustom () {
-
+function OrderCustom() {
   const [isViewModalopen, setViewModalOpen] = useState(false);
-  
-    const openViewModal = () => setViewModalOpen(true);
-    const closeViewModal = () => setViewModalOpen(false);
-    return(
-        
-       <Card className='mt-4'>
-        <Card.Header style={{backgroundColor:'#ebedef'}}>
-        <Row className='mt-3'><Col className='ms-3'><h4>Product Order : Custom</h4></Col></Row>
-        <Row className='mb-4'>  <Form className='d-flex'>
-            <Form.Control
-            type='search'
-            placeholder='Search for order...'
-            aria-label='Search'
-            className='me-3'
-            />
-            <Button variant='outline-success'>Search</Button>
-          </Form></Row>
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const openViewModal = (order) => {
+    setSelectedOrder(order);
+    setViewModalOpen(true);
+  };
+
+  const closeViewModal = () => {
+    setViewModalOpen(false);
+    setSelectedOrder(null);
+  };
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await adminOrderService.getOrdersByType(
+          'custom',
+          { page: 1, limit: 10 }
+        );
+
+        // check for success and orders
+        if (response.success && response.orders) {
+          setOrders(response.orders);
+          setFilteredOrders(response.orders); // Initialize filtered orders
+        } else {
+          setOrders([]); // Fallback to empty array
+          setFilteredOrders([]);
+        }
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+    fetchOrders();
+  }, []);
+
+  const handleApprove = async (orderId) => {
+    try {
+      await adminOrderService.updateOrder(orderId, 'approve');
+      // Refresh orders after approval
+      const response = await adminOrderService.getOrdersByType('custom', { page: 1, limit: 10 });
+      if (response.success && response.orders) {
+        setOrders(response.orders);
+        setFilteredOrders(response.orders); // Update filtered orders too
+      }
+    } catch (err) {
+      console.error('Failed to approve order:', err);
+    }
+  };
+
+  const handleReject = async (orderId) => {
+    try {
+      await adminOrderService.updateOrder(orderId, 'reject');
+      // Refresh orders after rejection
+      const response = await adminOrderService.getOrdersByType('custom', { page: 1, limit: 10 });
+      if (response.success && response.orders) {
+        setOrders(response.orders);
+        setFilteredOrders(response.orders); // Update filtered orders too
+      }
+    } catch (err) {
+      console.error('Failed to reject order:', err);
+    }
+  };
+
+  const handleDelete = async (orderId) => {
+    try {
+      await adminOrderService.deleteOrder(orderId);
+      // Refresh orders after deletion as OrderBulk
+      const response = await adminOrderService.getOrdersByType('custom', { page: 1, limit: 10 });
+      if (response.success && response.orders) {
+        setOrders(response.orders);
+        setFilteredOrders(response.orders); // Update filtered orders too
+      }
+    } catch (err) {
+      console.error('Failed to delete order:', err);
+    }
+  };
+
+  const getStatusBadge = (status) => {
+    const variants = {
+      draft: 'secondary',
+      pending: 'warning',
+      completed: 'success',
+      cancelled: 'danger'
+    };
+    return <Badge bg={variants[status]}>{status}</Badge>;
+  };
+
+  // Search functionality - same as OrderBulk. later add this function to custom and here. for both.
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const filtered = orders.filter(order =>
+      order.order_id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.customer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.order_status.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredOrders(filtered);
+  };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    // If search is empty, show all orders
+    if (value === '') {
+      setFilteredOrders(orders);
+    }
+  };
+
+  const handleAddNewOrder = () => {
+    // Add navigation logic here
+    alert('Add New Custom Order functionality - implement navigation here');
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <>
+      <Card className='mt-4'>
+        <Card.Header>
+          <h5>Custom Orders</h5>
         </Card.Header>
-
         <Card.Body>
-           <Row className='mb-3'>
-                      <Col className='justify-content-end'>
-                      <Button variant='outline-primary'><PlusLg /> Add New</Button>
-                      </Col>
-                    </Row>
-
-          <Table variant='light' striped bordered hover>
+          <Table responsive striped>
             <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Product</th>
+              <th>Type</th>
+              <th>Quantity</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {filteredOrders && filteredOrders.length > 0 ? (
+              filteredOrders.map((order) => (
+                <tr key={order.order_id}>
+                  <td>{order.order_id}</td>
+                  <td>{order.customer_name}</td>
+                  <td>{order.product_name}</td>
+                  <td>{order.order_type || 'custom'}</td>
+                  <td>{order.quantity}</td>
+                  <td>{order.total_amount}</td>
+                  <td>{getStatusBadge(order.order_status)}</td>
+                  <td>
+                    <Button
+                      variant='outline-success'
+                      size='sm'
+                      className='ms-1'
+                      onClick={() => handleApprove(order.order_id)}
+                    >
+                      <Check2Circle />
+                    </Button>
+                    <Button
+                      variant='outline-secondary'
+                      size='sm'
+                      className='ms-1'
+                      onClick={() => handleReject(order.order_id)}
+                    >
+                      <XCircle />
+                    </Button>
+                    <Button
+                      variant='outline-info'
+                      size='sm'
+                      className='ms-1'
+                      onClick={() => openViewModal(order)}
+                    >
+                      <Eye />
+                    </Button>
+                    <Button variant='outline-warning' size='sm' className='ms-1'>
+                      <PencilSquare />
+                    </Button>
+                    <Button
+                      variant='outline-danger'
+                      size='sm'
+                      className='ms-1 me-1'
+                      onClick={() => handleDelete(order.order_id)}
+                    >
+                      <TrashFill />
+                    </Button>
+                  </td>
+                </tr>
+              ))
+            ) : (
               <tr>
-                <th style={{verticalAlign:"middle", textAlign:"center", width:"6%"}}>OID</th>
-                <th style={{verticalAlign:"middle", textAlign:"center ", width:"10%"}}>Customer Name</th>
-                <th style={{verticalAlign:"middle", textAlign:"center", width:"6%"}}>Phone</th>
-                <th style={{verticalAlign:"middle", textAlign:"center", width:"9%"}}>Email</th>
-                <th style={{verticalAlign:"middle", textAlign:"center", width:"12%"}}>Description</th>
-                <th style={{verticalAlign:"middle", textAlign:"center", width:"9%"}}>Image</th>
-                <th style={{verticalAlign:"middle", textAlign:"center", width:"4%"}}>Quantity</th>
-                <th style={{verticalAlign:"middle", textAlign:"center", width:"5%"}}>Total Amount</th>
-                <th style={{verticalAlign:"middle", textAlign:"center", width:"5%"}}>Delivery Date</th>
-                <th style={{verticalAlign:"middle", textAlign:"center", width:"5%"}}>Delivery Type</th>
-                <th style={{verticalAlign:"middle", textAlign:"center", width:"20%"}}>Action</th>
-              </tr>
-              <tr>
-                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
-                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
-                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
-                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
-                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
-                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
-                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
-                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
-                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
-                <td style={{verticalAlign:"middle", textAlign:"center"}}></td>
-                <td style={{verticalAlign:"middle", textAlign:"center"}}>
-                  <Button variant='outline-success' className='ms-1'><Check2Circle /></Button>
-                  <Button variant='outline-secondary' className='ms-1'><XCircle /></Button>
-                  <Button variant='outline-info' className='ms-1' onClick={openViewModal}><Eye /></Button>
-                  <Button variant='outline-warning' className='ms-1'><PencilSquare /></Button>
-                  <Button variant='outline-danger' className='ms-1 me-1'><TrashFill /></Button>
+                <td colSpan="8" className="text-center">
+                  No orders found
                 </td>
               </tr>
-            </thead>
+            )}
+            </tbody>
           </Table>
-
-          <ViewModal isViewModalopen={isViewModalopen} closeViewModal={closeViewModal} />
-
-
-          <Row>
-          <Col></Col>
-          <Col>
-          <Pagination id='customPagination' size='sm' className='d-flex justify-content'>
-              <Pagination.First />
-              <Pagination.Prev />
-              <Pagination.Item active>{1}</Pagination.Item>
-              <Pagination.Item>{2}</Pagination.Item>
-              <Pagination.Item>{3}</Pagination.Item>
-              <Pagination.Item>{4}</Pagination.Item>
-              <Pagination.Next />
-              <Pagination.Last />
-          </Pagination>
-          </Col>
-          <Col></Col>
-          </Row>
         </Card.Body>
       </Card>
-        
-    );
+      {/* alert not working because this is uncommented but add view modal asap */}
+      {isViewModalopen && selectedOrder && (
+        <ViewModal
+          show={isViewModalopen}
+          onHide={closeViewModal}
+          order={selectedOrder}
+        />
+      )}
+    </>
+  );
 }
 
 export default OrderCustom;
-
