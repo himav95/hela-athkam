@@ -1,16 +1,15 @@
 import { Row, Col, Card, Button, Form, Table, Pagination, Badge } from 'react-bootstrap';
 import { PencilSquare, TrashFill, Check2Circle, XCircle, Eye, PlusLg } from 'react-bootstrap-icons';
 import { useState, useEffect } from 'react';
-// uncomment this line after ViewModal updates are done.
-// import ViewModal from '../Admin/Components/ViewModal';
+import ViewModal from '../Admin/Components/ViewModal';
 import adminOrderService from "../../Services/adminOrderService";
 import axios from 'axios';
 import '../../Asset/Style/Helaathkam_Page.css';
 
 function OrderBulk() {
-  // should uncomment these lines if ViewModal is working. but check the viewmodal fields for bulk and custom. just in case.
-  // const [isViewModalopen, setViewModalOpen] = useState(false);
-  // const [selectedOrder, setSelectedOrder] = useState(null);
+  // ViewModal state
+  const [isViewModalopen, setViewModalOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
@@ -18,15 +17,33 @@ function OrderBulk() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // uncomment only  if ViewModal is working.
-  // const openViewModal = (order) => {
-  //   setSelectedOrder(order);
-  //   setViewModalOpen(true);
-  // };
-  // const closeViewModal = () => {
-  //   setViewModalOpen(false);
-  //   setSelectedOrder(null);
-  // };
+  // ViewModal functions
+  const openViewModal = (order) => {
+    // Ensure we pass the order with order_type for bulk orders
+    const orderWithType = {
+      ...order,
+      order_type: order.order_type || 'bulk' // Add type if missing
+    };
+    setSelectedOrder(orderWithType);
+    setViewModalOpen(true);
+  };
+
+  const closeViewModal = () => {
+    setViewModalOpen(false);
+    setSelectedOrder(null);
+  };
+
+  // function to handle status updates from the modal
+  const handleStatusUpdate = (orderId, newStatus) => {
+    // Update the local state to reflect the change
+    const updatedOrders = orders.map(order =>
+      order.order_id === orderId
+        ? { ...order, order_status: newStatus }
+        : order
+    );
+    setOrders(updatedOrders);
+    setFilteredOrders(updatedOrders);
+  };
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -105,14 +122,12 @@ function OrderBulk() {
     return <Badge bg={variants[status]}>{status}</Badge>;
   };
 
-  // Search functionality
+  // Search functionality - updated to only search by order_id and customer_name
   const handleSearch = (e) => {
     e.preventDefault();
     const filtered = orders.filter(order =>
       order.order_id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.customer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.order_status.toLowerCase().includes(searchTerm.toLowerCase())
+      order.customer_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredOrders(filtered);
   };
@@ -129,7 +144,6 @@ function OrderBulk() {
 
   const handleAddNewOrder = () => {
     // Add navigation logic here
-    // For example: navigate('/admin/orders/new') or open the modal for this
     alert('Add New Order functionality - implement navigation here');
   };
 
@@ -139,14 +153,30 @@ function OrderBulk() {
   return (
     <>
       <Card className='mt-4'>
-        <Card.Header>
-          <h5>Bulk Orders</h5>
+        <Card.Header style={{ backgroundColor: '#ebedef' }}>
+          <Row className='mt-3'>
+            <Col className='ms-3'>
+              <h4>Bulk Orders</h4>
+            </Col>
+          </Row>
+          <Row className='mb-4'>
+            <Form className='d-flex' onSubmit={handleSearch}>
+              <Form.Control
+                type='search'
+                placeholder='Search by Order ID or Customer...'
+                aria-label='Search'
+                className='me-3'
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              <Button variant='outline-success' type="submit">Search</Button>
+            </Form>
+          </Row>
         </Card.Header>
         <Card.Body>
           <Table responsive striped>
             <thead>
             <tr>
-              {/*try id customization here and custom like order forms.*/}
               <th>Order ID</th>
               <th>Customer</th>
               <th>Product</th>
@@ -187,10 +217,7 @@ function OrderBulk() {
                       variant='outline-info'
                       size='sm'
                       className='ms-1'
-                      // Keeping the working alert version for now ok.
-                      onClick={() => alert('View details: ' + JSON.stringify(order, null, 2))}
-                      // after ViewModal is fixed, replace above line with:
-                      // onClick={() => openViewModal(order)}
+                      onClick={() => openViewModal(order)} // Changed from alert to openViewModal
                     >
                       <Eye />
                     </Button>
@@ -220,16 +247,14 @@ function OrderBulk() {
         </Card.Body>
       </Card>
 
-      {/* Only uncomment this section when ViewModal is working properly */}
-      {/*
       {isViewModalopen && selectedOrder && (
         <ViewModal
           show={isViewModalopen}
           onHide={closeViewModal}
           order={selectedOrder}
+          onStatusUpdate={handleStatusUpdate}
         />
       )}
-      */}
     </>
   );
 }

@@ -45,7 +45,7 @@ const getUsers = async (req, res) => {
             offset: offset
         });
 
-        console.log(`✅ Found ${count} users, returning ${users.length} for page ${page}`);
+        console.log(`Found ${count} users, returning ${users.length} for page ${page}`);
 
         // Format the response data
         const formattedUsers = users.map(user => ({

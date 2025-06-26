@@ -1,4 +1,5 @@
 // Services/adminOrderService.js
+// api calls for orders, products, and users in the admin panel is here.
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 class AdminOrderService {
@@ -20,7 +21,7 @@ class AdminOrderService {
 
       const queryParams = new URLSearchParams(otherFilters);
 
-      // Use the correct endpoint paths that match your AdminController
+      // Use the correct endpoint paths that match AdminController
       const endpoint = orderType === 'bulk'
         ? `${API_BASE_URL}/admin/orders/bulk?${queryParams.toString()}`
         : `${API_BASE_URL}/admin/orders/custom?${queryParams.toString()}`;
@@ -131,6 +132,9 @@ class AdminOrderService {
     }
   }
 
+
+  ////////////////////////////////////////
+
   // product methods are here.
 
   // Get all products with filters
@@ -221,6 +225,9 @@ class AdminOrderService {
       throw error;
     }
   }
+
+
+  /////////////////////////////////////////
 
   // User methods are here.
 

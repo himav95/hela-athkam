@@ -222,6 +222,9 @@ const getCustomOrders = async (req, res) => {
     }
 };
 
+
+// Order actions for admin management
+
 // PUT /api/admin/orders/:id/approve - Approve an order
 const approveOrder = async (req, res) => {
     try {
@@ -377,11 +380,13 @@ const updateOrderStatus = async (req, res) => {
     }
 };
 
+
+
 // GET /api/admin/craftsmen - Get all craftsmen (placeholder)
 const getCraftsmen = async (req, res) => {
     try {
         console.log('Fetching craftsmen data');
-        // This would fetch from craftsmen table/model which is not yet created.
+        // This would fetch from craftsmen table/model. aka craftmakers table.
         // For now, returning a placeholder response
         res.json({
             success: true,
@@ -396,6 +401,8 @@ const getCraftsmen = async (req, res) => {
         });
     }
 };
+
+
 
 // GET /api/admin/dashboard/stats - Get dashboard statistics
 const getDashboardStats = async (req, res) => {

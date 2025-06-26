@@ -1,7 +1,7 @@
 // routes/userRoutes.js regarding user profile management
 const express = require('express');
 const router = express.Router();
-const { authenticateToken } = require('../Middleware/authMiddleware');
+const { authenticateToken } = require('../Middleware/AuthMiddleware');
 const User = require('../Models/UserModel');
 const { body, validationResult } = require('express-validator');
 

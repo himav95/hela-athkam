@@ -58,17 +58,17 @@ function Product() {
   };
 
   const handleEdit = (productId) => {
-    // Add your edit logic here
+    // Add edit logic here
     alert(`Edit product functionality - Product ID: ${productId}`);
   };
 
   const handleView = (product) => {
-    // Add your view logic here
+    // Add view logic here
     alert('View product details: ' + JSON.stringify(product, null, 2));
   };
 
   const handleAddNew = () => {
-    // Add your navigation logic here
+    // Add navigation logic here
     alert('Add New Product functionality - implement navigation here');
   };
 
@@ -134,7 +134,7 @@ function Product() {
         <Row className='mb-3'>
           <Col className='d-flex justify-content-end'>
             <Button variant='outline-primary' onClick={handleAddNew}>
-              <PlusLg /> Add New
+              <PlusLg /> Add Product
             </Button>
           </Col>
         </Row>

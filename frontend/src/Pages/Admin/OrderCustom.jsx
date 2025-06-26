@@ -102,14 +102,12 @@ function OrderCustom() {
     return <Badge bg={variants[status]}>{status}</Badge>;
   };
 
-  // Search functionality - same as OrderBulk. later add this function to custom and here. for both.
+  // Search functionality - updated to only search by order_id and customer_name
   const handleSearch = (e) => {
     e.preventDefault();
     const filtered = orders.filter(order =>
       order.order_id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.customer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.order_status.toLowerCase().includes(searchTerm.toLowerCase())
+      order.customer_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredOrders(filtered);
   };
@@ -135,8 +133,25 @@ function OrderCustom() {
   return (
     <>
       <Card className='mt-4'>
-        <Card.Header>
-          <h5>Custom Orders</h5>
+        <Card.Header style={{ backgroundColor: '#ebedef' }}>
+          <Row className='mt-3'>
+            <Col className='ms-3'>
+              <h4>Custom Orders</h4>
+            </Col>
+          </Row>
+          <Row className='mb-4'>
+            <Form className='d-flex' onSubmit={handleSearch}>
+              <Form.Control
+                type='search'
+                placeholder='Search by Order ID or Customer...'
+                aria-label='Search'
+                className='me-3'
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              <Button variant='outline-success' type="submit">Search</Button>
+            </Form>
+          </Row>
         </Card.Header>
         <Card.Body>
           <Table responsive striped>
@@ -213,7 +228,7 @@ function OrderCustom() {
           </Table>
         </Card.Body>
       </Card>
-      {/* alert not working because this is uncommented but add view modal asap */}
+
       {isViewModalopen && selectedOrder && (
         <ViewModal
           show={isViewModalopen}
