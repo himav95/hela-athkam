@@ -1,7 +1,15 @@
 // express app configuration file.
+// app.js
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
+
+// Import models to ensure they're registered before associations
+require('./Models/OrderModel');
+require('./Models/UserModel');
+require('./Models/ProductModel');
+require('./Models/RequestModel');
 
 const app = express();
 
@@ -10,18 +18,26 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-const authRoutes = require('./Routes/AuthRoutes');  // Importing auth routes
+const authRoutes = require('./Routes/AuthRoutes');
 app.use('/api/auth', authRoutes);
 
-const userRoutes = require('./Routes/userRoutes'); // Importing user routes
+const userRoutes = require('./Routes/userRoutes');
 app.use('/api/users', userRoutes);
 
-// import and register product routes
-app.use('/api/products', require('./Routes/ProductRoutes')); // Importing product routes
+app.use('/api/products', require('./Routes/ProductRoutes'));
 
-// import and register order routes
-const orderRoutes = require('./Routes/OrderRoutes'); // Importing order routes
+// order routes (public access for submissions)
+const orderRoutes = require('./Routes/OrderRoutes');
 app.use('/api/orders', orderRoutes);
 
-// Exporting the the app. server does not start up here.
+const adminRoutes = require('./Routes/AdminRoutes');
+app.use('/api/admin', adminRoutes);
+
+// Craftmaker request routes (public access for submissions)
+const craftmakerRequestRoutes = require('./Routes/CraftmakerRequestRoutes');
+app.use('/api/craftmaker-applications', craftmakerRequestRoutes);
+
+// Serve uploaded files statically
+app.use('/Uploads', express.static(path.join(__dirname, 'Uploads')));
+
 module.exports = app;
