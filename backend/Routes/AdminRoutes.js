@@ -8,7 +8,9 @@ const updateProduct = require('../Controllers/UpdateProductController');
 const getAllProducts = require('../Controllers/ViewProductController');
 const updatePassword = require('../Controllers/UpdatePasswordController');
 const addUser = require('../Controllers/AddUserController');
-const viewMessageController = require('../Controllers/ViewMessageController');
+
+// Import the ViewMessageController for message management
+const { getMessages, deleteMessage } = require('../Controllers/ViewMessageController');
 
 // Import the AdminController for order management
 const {
@@ -29,7 +31,6 @@ const {
     createUser,
     updateUser,
     deleteUser,
-
 } = require('../Controllers/UserManagementController');
 
 AdminRoutes.get('/', function (req, res) {
@@ -46,7 +47,10 @@ AdminRoutes.delete('/delete-product/:id', deleteProduct);
 AdminRoutes.put('/update-product/:id', updateProduct);
 AdminRoutes.put('/update-password/:email', updatePassword);
 AdminRoutes.post('/add-user', addUser);
-AdminRoutes.get('/get-messages', viewMessageController);
+
+// message management routes.
+AdminRoutes.get('/get-messages', getMessages);
+AdminRoutes.delete('/delete-message/:id', deleteMessage);
 
 // order management routes.
 AdminRoutes.get('/orders/bulk', getBulkOrders);
@@ -64,6 +68,5 @@ AdminRoutes.get('/users/:id', getUserById);
 AdminRoutes.post('/users', createUser);
 AdminRoutes.put('/users/:id', updateUser);
 AdminRoutes.delete('/users/:id', deleteUser);
-
 
 module.exports = AdminRoutes;

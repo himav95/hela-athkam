@@ -13,11 +13,12 @@ const {
     getCraftmakerApplications,
     getCraftmakerApplicationById,
     updateApplicationStatus,
+    deleteCraftmakerApplication, // Added delete function
     getApplicationStats,
     craftmakerApplicationValidationRules
 } = require('../Controllers/CraftmakerRequestController');
 
-// POST /api/craftmaker-applications - Submit new craftmaker application (Public)
+// POST /api/craftmaker-applications - Submit new craftmaker application (Public): user that not logged in.
 router.post('/',
     uploadCraftmakerProductImages,
     handleCraftmakerUploadError,
@@ -52,6 +53,13 @@ router.put('/:id/status',
     authenticateToken,
     requireAdmin,
     updateApplicationStatus
+);
+
+// DELETE /api/craftmaker-applications/:id - Delete application (Admin only)
+router.delete('/:id',
+    authenticateToken,
+    requireAdmin,
+    deleteCraftmakerApplication
 );
 
 module.exports = router;

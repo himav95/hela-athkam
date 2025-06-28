@@ -4,6 +4,14 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api
 
 class RequestService {
 
+  getAuthHeaders() {
+    const token = localStorage.getItem('token');
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+  }
+
   // Submit craftmaker application (public access - no auth needed)
   async submitCraftmakerApplication(formData) {
     try {
@@ -27,17 +35,13 @@ class RequestService {
   // Get craftmaker applications (admin only - with auth)
   async getCraftmakerApplications(filters = {}) {
     try {
-      const token = localStorage.getItem('authToken');
       const queryParams = new URLSearchParams(filters);
 
       const response = await fetch(
         `${API_BASE_URL}/craftmaker-applications?${queryParams.toString()}`,
         {
           method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
+          headers: this.getAuthHeaders()  // Using the same method as adminOrderService
         }
       );
 
@@ -55,16 +59,11 @@ class RequestService {
   // Get single craftmaker application by ID (admin only)
   async getCraftmakerApplicationById(applicationId) {
     try {
-      const token = localStorage.getItem('authToken');
-
       const response = await fetch(
         `${API_BASE_URL}/craftmaker-applications/${applicationId}`,
         {
           method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
+          headers: this.getAuthHeaders()  // Using the same method as adminOrderService
         }
       );
 
@@ -80,19 +79,14 @@ class RequestService {
   }
 
   // Update application status (admin only)
-  async updateApplicationStatus(applicationId, status, adminNotes = '') {
+  async updateApplicationStatus(applicationId, status) {
     try {
-      const token = localStorage.getItem('authToken');
-
       const response = await fetch(
         `${API_BASE_URL}/craftmaker-applications/${applicationId}/status`,
         {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ status, adminNotes })
+          headers: this.getAuthHeaders(),  // Using the same method as adminOrderService
+          body: JSON.stringify({ status })
         }
       );
 
@@ -107,19 +101,36 @@ class RequestService {
     }
   }
 
+  // Delete craftmaker application (admin only)
+  async deleteCraftmakerApplication(applicationId) {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/craftmaker-applications/${applicationId}`,
+        {
+          method: 'DELETE',
+          headers: this.getAuthHeaders()  // Using the same method as adminOrderService
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error deleting craftmaker application:', error);
+      throw error;
+    }
+  }
+
   // Get application statistics (admin only)
   async getApplicationStats() {
     try {
-      const token = localStorage.getItem('authToken');
-
       const response = await fetch(
         `${API_BASE_URL}/craftmaker-applications/stats`,
         {
           method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
+          headers: this.getAuthHeaders()  // Using the same method as adminOrderService
         }
       );
 

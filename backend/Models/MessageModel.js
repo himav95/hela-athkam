@@ -1,35 +1,47 @@
-// imports sequelize and DataTypes from './SequelizeInit' assuming it exports an object containing mentioned two objects.
-const {sequelize, DataTypes} = require('./SequelizeInit');
+// Message table model. join us page contact form messages.
 
-// defines sequelize model 'Message'
-const Message = sequelize.define('Messages', {                
-    name: {                                                   // properties and configurations on Messages table/model.
-        type: DataTypes.STRING,                               // columns as name, email and so on.
+const { DataTypes } = require('sequelize');
+const sequelize = require('../Config/db');
+
+const Message = sequelize.define('Message', {
+    name: {
+        type: DataTypes.STRING(100),
         allowNull: false,
+        validate: {
+            len: [2, 100],
+            notEmpty: true
+        }
     },
-
     email: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(255),
         allowNull: false,
+        validate: {
+            isEmail: true,
+            notEmpty: true
+        }
     },
-
     subject: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(200),
         allowNull: false,
+        validate: {
+            len: [5, 200],
+            notEmpty: true
+        }
     },
-
     message: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
-    },
-
-    createdAt: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-
+        validate: {
+            len: [10, 1000],
+            notEmpty: true
+        }
+    }
+}, {
+    tableName: 'messages',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: false, // No updated_at field as messages shouldn't be updated
+    underscored: true
 });
-
-// Message.sync({alter:true});
 
 module.exports = Message;

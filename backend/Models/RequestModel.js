@@ -101,7 +101,7 @@ const CraftmakerRequest = sequelize.define('CraftmakerRequest', {
         defaultValue: DataTypes.NOW
     },
 
-    // Image Storage - Using ARRAY to match database
+    // Image Storage - Using ARRAY to match your database
     product_images: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,

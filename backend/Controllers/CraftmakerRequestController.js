@@ -1,4 +1,4 @@
-// Controller for handling craftmaker applications is here.
+// Craftmaker request form component logic and admin dashboard craftmaker request view table logics are here.
 const CraftmakerRequest = require('../Models/RequestModel');
 const { body, validationResult } = require('express-validator');
 const path = require('path');
@@ -56,7 +56,7 @@ const craftmakerApplicationValidationRules = [
     body('product_category')
         .notEmpty()
         .withMessage('Product category is required')
-        .isIn(['houseware', 'kitchenware', 'tableware', 'bags', 'other']) // Updated categories
+        .isIn(['houseware', 'kitchenware', 'tableware', 'bags', 'other'])
         .withMessage('Invalid product category'),
 
     body('description')
@@ -145,7 +145,7 @@ const submitCraftmakerApplication = async (req, res) => {
             console.log('Product images:', productImages);
         }
 
-        // Prepare data for database insertion
+        // Prepare data for database insertion - matching exact database structure
         const applicationData = {
             name: name,
             nic: nic,
@@ -156,7 +156,7 @@ const submitCraftmakerApplication = async (req, res) => {
             product_category: product_category,
             description: description || null,
             product_images: productImages,
-            request_status: 'pending',
+            request_status: 'pending', // Initial status as requested
             request_date: new Date()
         };
 
@@ -247,7 +247,6 @@ const getCraftmakerApplications = async (req, res) => {
                 'craftsman_id', 'name', 'nic', 'email', 'phone', 'address',
                 'product_name', 'product_category', 'description',
                 'product_images', 'request_status', 'request_date'
-                // REMOVED: 'admin_notes', 'processed_date' since they don't exist in DB
             ],
             order: [['request_date', 'DESC']],
             limit: parseInt(limit),
@@ -306,11 +305,12 @@ const getCraftmakerApplicationById = async (req, res) => {
 };
 
 // PUT /api/craftmaker-applications/:id/status - Update application status (Admin only)
-// SIMPLIFIED VERSION - Only updates request_status since admin_notes and processed_date don't exist
 const updateApplicationStatus = async (req, res) => {
     try {
         const { id } = req.params;
         const { status } = req.body;
+
+        console.log(`Updating application ${id} status to: ${status}`);
 
         // Validate status
         const validStatuses = ['pending', 'approved', 'rejected'];
@@ -329,14 +329,16 @@ const updateApplicationStatus = async (req, res) => {
             });
         }
 
-        // Update application - only status since other fields don't exist
+        // Update application status
         await application.update({
             request_status: status
         });
 
+        console.log(`Application ${id} status updated to ${status}`);
+
         res.json({
             success: true,
-            message: 'Application status updated successfully',
+            message: `Application ${status} successfully`,
             application: {
                 craftsman_id: application.craftsman_id,
                 name: application.name,
@@ -349,6 +351,51 @@ const updateApplicationStatus = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Server error while updating application status',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+};
+
+// DELETE /api/craftmaker-applications/:id - Delete application (Admin only)
+const deleteCraftmakerApplication = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        console.log(`Deleting craftmaker application ${id}`);
+
+        const application = await CraftmakerRequest.findByPk(id);
+        if (!application) {
+            return res.status(404).json({
+                success: false,
+                message: 'Application not found'
+            });
+        }
+
+        // Delete associated files if they exist
+        if (application.product_images && application.product_images.length > 0) {
+            application.product_images.forEach(imagePath => {
+                const fullPath = path.join(__dirname, '..', imagePath);
+                fs.unlink(fullPath, (err) => {
+                    if (err) console.error('Error deleting image file:', err);
+                });
+            });
+        }
+
+        // Delete the application record
+        await application.destroy();
+
+        console.log(`Application ${id} deleted successfully`);
+
+        res.json({
+            success: true,
+            message: 'Application deleted successfully'
+        });
+
+    } catch (error) {
+        console.error('Delete craftmaker application error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error while deleting application',
             error: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }
@@ -404,6 +451,7 @@ module.exports = {
     getCraftmakerApplications,
     getCraftmakerApplicationById,
     updateApplicationStatus,
+    deleteCraftmakerApplication, // Added delete function
     getApplicationStats,
     craftmakerApplicationValidationRules
 };
