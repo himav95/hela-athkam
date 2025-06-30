@@ -71,13 +71,6 @@ const SideNav = () => {
           </Button>
         </Link>
 
-        <Link to="/admin/craftmaker" style={{ width: '100%' }}>
-          <Button
-            className={`listgroupButton mb-1 ${isActive('/admin/craftmaker') ? 'active' : ''}`}
-          >
-            <CaretRight className="caretRight1" /> Craft Maker
-          </Button>
-        </Link>
 
         <Link to="/admin/user" style={{ width: '100%' }}>
           <Button

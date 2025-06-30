@@ -25,7 +25,6 @@ import OrderBulk from './Pages/Admin/OrderBulk';
 import OrderCustom from './Pages/Admin/OrderCustom';
 import TopNav from './Pages/Admin/Components/TopNav';
 import SideNav from './Pages/Admin/Components/SideNav';
-import CraftMaker from './Pages/Admin/CraftMaker';
 import CraftMakerRequest from './Pages/Admin/CraftMakerRequest';
 import Product from './Pages/Admin/Product';
 import User from './Pages/Admin/User';
@@ -197,14 +196,6 @@ function App() {
             }
           />
 
-          <Route
-            path="/admin/craftmaker"
-            element={
-              <AdminLayout>
-                <CraftMaker />
-              </AdminLayout>
-            }
-          />
 
           <Route
             path="/admin/craftmakerrequest"

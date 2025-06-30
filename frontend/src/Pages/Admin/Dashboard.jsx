@@ -6,9 +6,7 @@ import {
   Bag,
   ChatDots,
   PersonPlus,
-  Calendar3,
-  ArrowUp,
-  ArrowDown
+  Calendar3
 } from 'react-bootstrap-icons';
 
 // Import Helaathkam Page CSS file
@@ -29,22 +27,20 @@ function Dashboard() {
 
   const { getDashboardData } = useDashboardLogics();
 
-  // Function to render trend indicator
-  const renderTrend = (change) => {
+  // Function to render new items count
+  const renderNewCount = (change) => {
     if (change > 0) {
       return (
         <span className="text-success d-flex align-items-center">
-          <ArrowUp size={12} className="me-1" /> {change}%
-        </span>
-      );
-    } else if (change < 0) {
-      return (
-        <span className="text-danger d-flex align-items-center">
-          <ArrowDown size={12} className="me-1" /> {Math.abs(change)}%
+          +{change} new
         </span>
       );
     }
-    return null;
+    return (
+      <span className="text-muted d-flex align-items-center">
+        0 new
+      </span>
+    );
   };
 
   // Function to render metric card
@@ -66,7 +62,7 @@ function Dashboard() {
         <h4 className="mt-2 mb-1">{count}</h4>
         <div className="d-flex justify-content-between align-items-center">
           <div className="dashboard-card-title">{title}</div>
-          <div className="dashboard-trend">{renderTrend(change)}</div>
+          <div className="dashboard-trend">{renderNewCount(change)}</div>
         </div>
       </Card.Body>
     </Card>
@@ -93,7 +89,7 @@ function Dashboard() {
               <MetricCard
                 id="filterCards1"
                 icon={<BarChart size={24} />}
-                title="New Bulk Orders"
+                title="Bulk Orders"
                 count={dashboardData.bulkOrders.count}
                 change={dashboardData.bulkOrders.change}
                 badgeText="Today"
@@ -104,7 +100,7 @@ function Dashboard() {
               <MetricCard
                 id="filterCards2"
                 icon={<ClipboardCheck size={24} />}
-                title="New Custom Orders"
+                title="Custom Orders"
                 count={dashboardData.customOrders.count}
                 change={dashboardData.customOrders.change}
                 badgeText="Today"
@@ -139,7 +135,7 @@ function Dashboard() {
               <MetricCard
                 id="filterCards4"
                 icon={<ChatDots size={24} />}
-                title="New Messages"
+                title="Messages"
                 count={dashboardData.messages.count}
                 change={dashboardData.messages.change}
                 badgeText="Unread"
