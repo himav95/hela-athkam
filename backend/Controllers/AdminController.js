@@ -222,6 +222,27 @@ const getCustomOrders = async (req, res) => {
     }
 };
 
+// GET /api/admin/craftsmen - Get all craftsmen (placeholder)
+const getCraftsmen = async (req, res) => {
+    try {
+        console.log('Fetching craftsmen data');
+        // This would fetch from craftsmen table/model. aka craftmakers table.
+        // For now, returning a placeholder response
+        res.json({
+            success: true,
+            craftsmen: [],
+            message: 'Craftsmen endpoint - to be implemented'
+        });
+    } catch (error) {
+        console.error('Get craftsmen error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error while fetching craftsmen'
+        });
+    }
+};
+
+
 
 // Order actions for admin management
 
@@ -382,25 +403,6 @@ const updateOrderStatus = async (req, res) => {
 
 
 
-// GET /api/admin/craftsmen - Get all craftsmen (placeholder)
-const getCraftsmen = async (req, res) => {
-    try {
-        console.log('Fetching craftsmen data');
-        // This would fetch from craftsmen table/model. aka craftmakers table.
-        // For now, returning a placeholder response
-        res.json({
-            success: true,
-            craftsmen: [],
-            message: 'Craftsmen endpoint - to be implemented'
-        });
-    } catch (error) {
-        console.error('Get craftsmen error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Server error while fetching craftsmen'
-        });
-    }
-};
 
 
 

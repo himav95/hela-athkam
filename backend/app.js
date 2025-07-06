@@ -40,4 +40,8 @@ app.use('/api/craftmaker-applications', craftmakerRequestRoutes);
 // Serve uploaded files statically
 app.use('/Uploads', express.static(path.join(__dirname, 'Uploads')));
 
+// Admin dashboard routes
+const dashboardRoutes = require('./routes/DashboardRoutes'); // Adjust path as needed
+app.use('/api/dashboard', dashboardRoutes);
+
 module.exports = app;

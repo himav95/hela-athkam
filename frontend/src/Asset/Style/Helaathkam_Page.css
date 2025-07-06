@@ -310,18 +310,6 @@
   margin-bottom: 0;
 }
 
-.dashboard-metric-card {
-  height: 100% !important;
-  border-radius: 12px !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
-}
-
-.dashboard-metric-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
-}
-
 .dashboard-icon-container {
   display: flex;
   align-items: center;
@@ -332,14 +320,37 @@
   background-color: rgba(255, 255, 255, 0.3);
 }
 
+.dashboard-metric-card {
+  height: 160px !important; /* Fixed height for all cards */
+  min-height: 160px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.dashboard-metric-card:hover:not(.disabled-card) {
+  transform: translateY(-2px);
+}
+
+.dashboard-metric-card .card-body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .dashboard-card-title {
-  font-size: 14px;
+  font-size: 0.9rem;
   font-weight: 500;
+  color: #000000;
+  line-height: 1.2;
+  /* Prevent text from wrapping and causing height changes */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .dashboard-trend {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 0.8rem;
+  white-space: nowrap;
 }
 
 /* dashboard card css is here. */
@@ -394,21 +405,21 @@
   padding: 1.25rem;
 }
 
-#filterCards1:hover, #filterCards2:hover, #filterCards3:hover,
-#filterCards4:hover, #filterCards5:hover {
-  filter: brightness(95%);
-}
+/*#filterCards1:hover, #filterCards2:hover, #filterCards3:hover,*/
+/*#filterCards4:hover, #filterCards5:hover {*/
+/*  color: black;*/
+/*}*/
 
 
-#filterCards5 {
-  width: 15rem;
-  height: 8rem !important;
-  color: black;
-  border: none;
-  background-color: #be6d8b;
-  text-align: center;
-  padding: 10px;
-}
+/*#filterCards5 {*/
+/*  width: 15rem;*/
+/*  height: 8rem !important;*/
+/*  color: black;*/
+/*  border: none;*/
+/*  background-color: #be6d8b;*/
+/*  text-align: center;*/
+/*  padding: 10px;*/
+/*}*/
 
 
 #filterCards1:hover {
