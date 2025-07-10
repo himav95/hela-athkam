@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
 import { PersonCircle, ArrowLeft } from 'react-bootstrap-icons';
-import { useNavigate } from 'react-router-dom'; // Added useNavigate
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../Asset/Script/AuthContext';
+import ChangePasswordModal from '../../Components/ChangePasswordModal';
 import '../../../Asset/Style/Helaathkam_Page.css';
 
 const TopNav = () => {
   // Navigation hook for programmatic navigation
   const navigate = useNavigate();
+
+  // State for password change modal
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   // GET USER DATA: Access user info from AuthContext
   const { user, logout, isAuthenticated, userName } = useAuth();
@@ -23,69 +27,77 @@ const TopNav = () => {
     navigate('/');
   };
 
-  // HANDLE PASSWORD CHANGE: Navigate to password change page
+  // HANDLE PASSWORD CHANGE: Show modal
   const handlePasswordChange = () => {
-    navigate('/admin/change-password');
+    setShowPasswordModal(true);
   };
 
   return (
-    <Navbar
-      sticky="top"
-      style={{ backgroundColor: '#053B50', height: '50px' }}
-    >
-      {/* BACK TO SHOP BUTTON */}
-      <Button
-        variant="outline-light"
-        size="sm"
-        onClick={handleBackToShop}
-        className="me-3"
-        style={{ marginLeft: '15px' }}
+    <>
+      <Navbar
+        sticky="top"
+        style={{ backgroundColor: '#053B50', height: '50px' }}
       >
-        <ArrowLeft className="me-1" />
-        Back to Shop
-      </Button>
+        {/* BACK TO SHOP BUTTON */}
+        <Button
+          variant="outline-light"
+          size="sm"
+          onClick={handleBackToShop}
+          className="me-3"
+          style={{ marginLeft: '15px' }}
+        >
+          <ArrowLeft className="me-1" />
+          Back to Shop
+        </Button>
 
-      {/* BRAND/LOGO */}
-      <Navbar.Brand style={{ color: 'white', paddingLeft: '15px' }}>
-        <h4>Hela Athkam</h4>
-      </Navbar.Brand>
+        {/* BRAND/LOGO */}
+        <Navbar.Brand style={{ color: 'white', paddingLeft: '15px' }}>
+          <h4>Hela Athkam</h4>
+        </Navbar.Brand>
 
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="ms-auto d-flex align-items-center">
-          {/* USER ICON */}
-          <PersonCircle
-            style={{
-              color: 'white',
-              fontSize: '1.5rem',
-              marginRight: '25px',
-            }}
-          />
-        </Nav>
-      </Navbar.Collapse>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="ms-auto d-flex align-items-center">
+            {/* USER ICON */}
+            <PersonCircle
+              style={{
+                color: 'white',
+                fontSize: '1.5rem',
+                marginRight: '25px',
+              }}
+            />
+          </Nav>
+        </Navbar.Collapse>
 
-      {/* USER DROPDOWN: Shows user name and menu options */}
-      <NavDropdown
-        title={isAuthenticated ? userName : "Admin"}
-        id="basic-navbar-dropdown"
-        menuVariant="light"
-        align={'end'}
-        style={{ marginRight: '30px', color: 'white' }}
-      >
-        {/* PASSWORD CHANGE OPTION */}
-        <NavDropdown.Item onClick={handlePasswordChange}>
-          Change Password
-        </NavDropdown.Item>
+        {/* USER DROPDOWN: Shows user name and menu options */}
+        <NavDropdown
+          title={isAuthenticated ? userName : "Admin"}
+          id="basic-navbar-dropdown"
+          menuVariant="light"
+          align={'end'}
+          style={{ marginRight: '30px', color: 'white' }}
+        >
+          {/* PASSWORD CHANGE OPTION */}
+          <NavDropdown.Item onClick={handlePasswordChange}>
+            Change Password
+          </NavDropdown.Item>
 
-        {/* DIVIDER */}
-        <NavDropdown.Divider />
+          {/* DIVIDER */}
+          <NavDropdown.Divider />
 
-        {/* LOGOUT OPTION */}
-        <NavDropdown.Item onClick={handleLogout}>
-          Log out
-        </NavDropdown.Item>
-      </NavDropdown>
-    </Navbar>
+          {/* LOGOUT OPTION */}
+          <NavDropdown.Item onClick={handleLogout}>
+            Log out
+          </NavDropdown.Item>
+        </NavDropdown>
+      </Navbar>
+
+      {/* PASSWORD CHANGE MODAL */}
+      <ChangePasswordModal
+        show={showPasswordModal}
+        onHide={() => setShowPasswordModal(false)}
+      />
+    </>
   );
 };
 

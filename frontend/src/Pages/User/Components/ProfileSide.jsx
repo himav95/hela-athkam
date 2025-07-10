@@ -23,8 +23,8 @@ const ProfileSide = () => {
           gap: '10px',}}
             >
             
-            <Container style={{width:"12rem",
-              height:"15rem", 
+            <Container style={{width:"4rem",
+              height:"5rem",
               backgroundColor:"#EEEEEE",
               alignItems:"center",
               display:"flex",

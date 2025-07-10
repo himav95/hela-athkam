@@ -24,6 +24,10 @@ app.use('/api/auth', authRoutes);
 const userRoutes = require('./Routes/userRoutes');
 app.use('/api/users', userRoutes);
 
+// Password change routes
+const passwordRoutes = require('./Routes/PasswordRoutes');
+app.use('/api/password', passwordRoutes);
+
 app.use('/api/products', require('./Routes/ProductRoutes'));
 
 // order routes (public access for submissions)
@@ -43,5 +47,7 @@ app.use('/Uploads', express.static(path.join(__dirname, 'Uploads')));
 // Admin dashboard routes
 const dashboardRoutes = require('./routes/DashboardRoutes'); // Adjust path as needed
 app.use('/api/dashboard', dashboardRoutes);
+
+
 
 module.exports = app;
